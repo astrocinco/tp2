@@ -18,7 +18,7 @@
 
 
  -- DUDAS. DISCUTIR -- 
-        ¿FPRINTF O PRINTF? IMPRIMIMOS NORMALMENTE O EN STDOUT? // 1
+        ¿FPRINTF O PRINTF? IMPRIMIMOS NORMALMENTE O EN STDOUT? // 1 ES PRINTF
 
 
 --------------------------------------------------------------------*/
@@ -41,6 +41,7 @@
 typedef struct post{
     size_t nro_id;
     char* nombre_creador;
+    char* contenido;
     abb_t* likes;
 } post_t;
 
@@ -57,9 +58,7 @@ typedef struct usuario{
 } usuario_t;
 
 
-typedef struct todos_usuarios{ // REVISAR SI DEBERÍA HACERSE ASÍ
-    hash_t* diccionario_usu;   // TAL VEZ QUE EL HASH NO ESTE ADENTRO DE ESTE STRUCT
-} todos_usuarios_t;            // FALTARÍA ALGÚN ATRIBUTO MÁS? NRO_USUARIOS? (el número ya estaría en el hash ¿no?)
+// HASH DE USUARIOS - BORRAR ESTA LINEA
 
 
 // FUNCIONES
