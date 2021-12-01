@@ -37,6 +37,7 @@
 #include "abb.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
+#define TAM_MAX_INGRESO 150
 //#define _POSIX_C_SOURCE 200809L
 
 // --- STRUCTS
@@ -65,12 +66,36 @@ typedef struct usuario{
 
 //  --- FUNCIONES
 
+void login(){
+    return;
+}
+
 
 void esperar_orden(){
-
-    // GETLINE. RECIBIR COMANDO
-    // METER COMANDO EN SWTICHCASE Y EJECUTAR FUNCION CORRESPONDIENTE
-    // LOOP HASTA QUE EL USUARIO LLAME A QUIT
+    bool terminar = false;
+	char* ingreso = malloc(sizeof(char) * TAM_MAX_INGRESO);
+	int tam_buffer = 1000; // HACER CONSTANTE O VER DE DONDE SACAR.
+    int nro_car = getline(&ingreso, &tam_buffer, stdin);
+    while(!terminar){
+        if (strcmp(ingreso, "login") == 0){
+            printf("QUERÉS LOGEARTE CHIGADO?\n");
+            login();
+        }else if(strcmp(ingreso, "logout") == 0){
+            printf("QUERÉS salir CHIGADO?\n");
+        }else if(strcmp(ingreso, "publicar") == 0){
+            printf("QUERÉS publicar CHIGADO?\n");
+        }else if(strcmp(ingreso, "ver_siguiente_feed") == 0){
+            printf("QUERÉS ver_siguiente CHIGADO?\n");
+        }else if(strcmp(ingreso, "likear_post") == 0){
+            printf("QUERÉS likear CHIGADO?\n");
+        }else if(strcmp(ingreso, "mostrar_likes") == 0){
+            printf("QUERÉS mostrar_likes CHIGADO?\n");
+        }else if(strcmp(ingreso, "quit") == 0){ // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER
+            printf("QUERÉS quitear CHIGADO?\n");
+        }else{
+            printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO, CHIGADO\n");
+        }
+    }
     return;
 }
 
@@ -86,7 +111,7 @@ bool crear_usuario(hash_t* hash,char* nombre,int id){
 }
 
 
-hash_t* guardar_usuarios_txt_hash(FILE* archivo){
+hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
     hash_t* hash = hash_crear(free);
     char* line = NULL;
     size_t capacidad;
@@ -102,24 +127,18 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
 
 
 int main(int argc, char *argv[]){
-    // CHECKEAR NUMERO DE INGRESOS CORRECTO
-
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo."); // 1
         return -1;
     }
-
-    // ASEGURARSE QUE EL ARCHIVO EXISTA Y SE PUEDA LEER
     if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {//esto esta en py??
 
         printf("Error: archivo fuente inaccesible"); // 1
         return -1;
     }
-
-    // SACAR USUARIOS DEL ARCHIVO Y CREAR LOS USUARIOS. CADA USUARIO METER EN HASH DE USUARIOS. --- SIN TERMINAR
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
-    // LLAMAR FUNCION ESPERAR ORDEN LOOPEA ADENTRO DE esperar_orden (CONFIRMAR)
+    fclose(archivo);
     
     esperar_orden();
 
