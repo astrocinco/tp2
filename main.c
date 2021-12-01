@@ -37,7 +37,7 @@
 #include "abb.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
-
+//#define _POSIX_C_SOURCE 200809L
 
 // --- STRUCTS
 
@@ -67,27 +67,61 @@ typedef struct usuario{
 
 
 void esperar_orden(){
+
     // GETLINE. RECIBIR COMANDO
     // METER COMANDO EN SWTICHCASE Y EJECUTAR FUNCION CORRESPONDIENTE
     // LOOP HASTA QUE EL USUARIO LLAME A QUIT
     return;
 }
 
+bool crear_usuario(hash_t* hash,char* nombre,int id){
+    usuario_t* usuario = malloc(sizeof(usuario));
+    if (!usuario){
+        return false;     
+    } 
+
+    strcpy(usuario->nombre,nombre);
+    heap_t* feed = heap_crear(/* cmp */);
+    usuario->feed = feed;
+    usuario->id_txt = id;
+}
+
 
 int main(int argc, char *argv[]){
     // CHECKEAR NUMERO DE INGRESOS CORRECTO
+
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo."); // 1
         return -1;
     }
+
     // ASEGURARSE QUE EL ARCHIVO EXISTA Y SE PUEDA LEER
-    if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {
+    if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {//esto esta en py??
+
         fprintf(stderr, "Error: archivo fuente inaccesible"); // 1
         return -1;
     }
+
     // SACAR USUARIOS DEL ARCHIVO Y CREAR LOS USUARIOS. CADA USUARIO METER EN HASH DE USUARIOS. --- SIN TERMINAR
-    FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r"); //      SEGUIR SACANDO USUARIOS.
+
+    FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
+    //      SEGUIR SACANDO USUARIOS.
     // CREAR ACÁ HASH USUARIOS? Y MANDAR A esperar_orden
+    hash_t* hash = hash_crear(free);
+    
+    char* line = NULL;
+    size_t capacidad;
+    ssize_t longitud = getline(&line,&capacidad,archivo);
+    int id = 0;
+
+    while(longitud > 0){
+        hash_guardar(hash,line,id);
+        id++;
+        longitud = getline(&line,&capacidad,archivo);
+    }//esto esta incompleto
+
+
+
     for linea in archivo:   // HACER
        guardar_usuario_hash // HACER
 
@@ -95,6 +129,6 @@ int main(int argc, char *argv[]){
     
     esperar_orden();
 
-    // VOLVER AQUI CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
+    // VOLVER ACA CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
     return 0;
 }
