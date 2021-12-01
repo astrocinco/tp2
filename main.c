@@ -3,9 +3,9 @@
 
  -- TO DO --
         ARREGLO DE POSTS. 
-            STRUCT POST (ID, CREADOR, CONTENIDO, ABB LIKES)
+            STRUCT POST (ID, CREADOR, CONTENIDO, ABB LIKES)          -- HECHO
         HASH DE USUARIOS
-            STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)
+            STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)   -- HECHO
         HACER CMP PARA HEAP USANDO id_txt del struct "usuario"
     
 
@@ -44,7 +44,7 @@
 
 typedef struct post{
     size_t nro_id;
-    char* nombre_creador;
+    char* creador;
     char* contenido;
     abb_t* likes;
 } post_t;
@@ -58,7 +58,7 @@ typedef struct arreglo_posts{
 
 typedef struct usuario{
     char* nombre;
-    heap_t* posts_sin_ver;
+    heap_t* feed; // posts_sin_ver
     size_t id_txt;
 } usuario_t;
 
@@ -86,9 +86,12 @@ int main(int argc, char *argv[]){
         return -1;
     }
     // SACAR USUARIOS DEL ARCHIVO Y CREAR LOS USUARIOS. CADA USUARIO METER EN HASH DE USUARIOS. --- SIN TERMINAR
-    FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r"); //      SEGUIR SACANDO USUARIOS. 
+    FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r"); //      SEGUIR SACANDO USUARIOS.
+    // CREAR ACÁ HASH USUARIOS? Y MANDAR A esperar_orden
+    for linea in archivo:   // HACER
+       guardar_usuario_hash // HACER
 
-    // LLAMAR FUNCION LOOP ESPERAR ORDEN
+    // LLAMAR FUNCION ESPERAR ORDEN LOOPEA ADENTRO DE esperar_orden (CONFIRMAR)
     
     esperar_orden();
 
