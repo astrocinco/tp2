@@ -74,16 +74,30 @@ void esperar_orden(){
     return;
 }
 
+
 bool crear_usuario(hash_t* hash,char* nombre,int id){
     usuario_t* usuario = malloc(sizeof(usuario));
     if (!usuario){
         return false;     
     } 
-
     strcpy(usuario->nombre,nombre);
-    heap_t* feed = heap_crear(/* cmp */);
-    usuario->feed = feed;
+    usuario->feed = heap_crear(/* cmp */);
     usuario->id_txt = id;
+}
+
+
+hash_t* guardar_usuarios_txt_hash(FILE* archivo){
+    hash_t* hash = hash_crear(free);
+    char* line = NULL;
+    size_t capacidad;
+    ssize_t longitud = getline(&line,&capacidad,archivo);
+    int id = 0;
+
+    while(longitud > 0){
+        hash_guardar(hash,line,id);
+        id++;
+        longitud = getline(&line,&capacidad,archivo);
+    }//esto esta incompleto
 }
 
 
@@ -98,33 +112,13 @@ int main(int argc, char *argv[]){
     // ASEGURARSE QUE EL ARCHIVO EXISTA Y SE PUEDA LEER
     if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {//esto esta en py??
 
-        fprintf(stderr, "Error: archivo fuente inaccesible"); // 1
+        printf("Error: archivo fuente inaccesible"); // 1
         return -1;
     }
 
     // SACAR USUARIOS DEL ARCHIVO Y CREAR LOS USUARIOS. CADA USUARIO METER EN HASH DE USUARIOS. --- SIN TERMINAR
-
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
-    //      SEGUIR SACANDO USUARIOS.
-    // CREAR ACÁ HASH USUARIOS? Y MANDAR A esperar_orden
-    hash_t* hash = hash_crear(free);
-    
-    char* line = NULL;
-    size_t capacidad;
-    ssize_t longitud = getline(&line,&capacidad,archivo);
-    int id = 0;
-
-    while(longitud > 0){
-        hash_guardar(hash,line,id);
-        id++;
-        longitud = getline(&line,&capacidad,archivo);
-    }//esto esta incompleto
-
-
-
-    for linea in archivo:   // HACER
-       guardar_usuario_hash // HACER
-
+    hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     // LLAMAR FUNCION ESPERAR ORDEN LOOPEA ADENTRO DE esperar_orden (CONFIRMAR)
     
     esperar_orden();
