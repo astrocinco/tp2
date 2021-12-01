@@ -151,8 +151,8 @@ int main(int argc, char *argv[]){
     fclose(archivo);
     
     esperar_orden();
-    //hash_destruir(hash_usuarios);
 
+    //hash_destruir(hash_usuarios);
     // VOLVER ACA CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
     return 0;
 }
