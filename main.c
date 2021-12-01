@@ -119,13 +119,11 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
     hash_t* hash = hash_crear(free);
     char* line = NULL;
     size_t capacidad;
-    ssize_t longitud = getline(&line,&capacidad,archivo);
     int id = 0;
 
-    while(longitud > 0){
-        hash_guardar(hash,line,&id);
+    while(getline(&line, &capacidad, archivo)){
+        hash_guardar(hash, line, &id);
         id++;
-        longitud = getline(&line,&capacidad,archivo);
     }//esto esta incompleto
     return hash;
 }
