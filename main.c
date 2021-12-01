@@ -32,6 +32,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <string.h>
 #include "heap.h"
 #include "hash.h"
 #include "abb.h"
@@ -75,12 +76,12 @@ void esperar_orden(){
     bool terminar = false;
 	char* ingreso = malloc(sizeof(char) * TAM_MAX_INGRESO);
 	int tam_buffer = 1000; // HACER CONSTANTE O VER DE DONDE SACAR.
-    int nro_car = getline(&ingreso, &tam_buffer, stdin);
     while(!terminar){
+        int nro_car = getline(&ingreso, &tam_buffer, stdin);
         if (strcmp(ingreso, "login") == 0){
             printf("QUERÉS LOGEARTE CHIGADO?\n");
             login();
-        }else if(strcmp(ingreso, "logout") == 0){
+        }else if(strcmp(ingreso, "logout\n") == 0){
             printf("QUERÉS salir CHIGADO?\n");
         }else if(strcmp(ingreso, "publicar") == 0){
             printf("QUERÉS publicar CHIGADO?\n");
@@ -88,14 +89,16 @@ void esperar_orden(){
             printf("QUERÉS ver_siguiente CHIGADO?\n");
         }else if(strcmp(ingreso, "likear_post") == 0){
             printf("QUERÉS likear CHIGADO?\n");
-        }else if(strcmp(ingreso, "mostrar_likes") == 0){
+        }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
             printf("QUERÉS mostrar_likes CHIGADO?\n");
-        }else if(strcmp(ingreso, "quit") == 0){ // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER
+        }else if(strcmp(ingreso, "quit\n") == 0){ // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER
             printf("QUERÉS quitear CHIGADO?\n");
+            terminar = true;
         }else{
             printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO, CHIGADO\n");
         }
     }
+    free(ingreso);
     return;
 }
 
@@ -106,8 +109,9 @@ bool crear_usuario(hash_t* hash,char* nombre,int id){
         return false;     
     } 
     strcpy(usuario->nombre,nombre);
-    usuario->feed = heap_crear(/* cmp */);
+    //usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
     usuario->id_txt = id;
+    return true;
 }
 
 
@@ -119,10 +123,11 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
     int id = 0;
 
     while(longitud > 0){
-        hash_guardar(hash,line,id);
+        hash_guardar(hash,line,&id);
         id++;
         longitud = getline(&line,&capacidad,archivo);
     }//esto esta incompleto
+    return hash;
 }
 
 
@@ -141,6 +146,7 @@ int main(int argc, char *argv[]){
     fclose(archivo);
     
     esperar_orden();
+    //hash_destruir(hash_usuarios);
 
     // VOLVER ACA CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
     return 0;
