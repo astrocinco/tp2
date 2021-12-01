@@ -6,6 +6,7 @@
             STRUCT POST (ID, CREADOR, CONTENIDO, ABB LIKES)
         HASH DE USUARIOS
             STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)
+        HACER CMP PARA HEAP USANDO id_txt del struct "usuario"
     
 
  -- FUNCIONES QUE DEBE TENER --
@@ -18,8 +19,11 @@
 
 
  -- DUDAS. DISCUTIR -- 
-        ¿FPRINTF O PRINTF? IMPRIMIMOS NORMALMENTE O EN STDOUT? // 1 ES PRINTF
-
+        - ¿FPRINTF O PRINTF? IMPRIMIMOS NORMALMENTE O EN STDOUT? // 1         SOLUCIONADO -- > ES PRINTF
+        - ¿GETLINE LE PASAMOS UN PUNTERO CADA VEZ? O USAMOS SIEMPRE EL MISMO PUNTERO Y COPIAMOS SU CONTENIDO EN EL LUGAR CORRECTO
+        - PARA GUARDAR USUARIO LOGEADO: GUARDAR COMO VARIABLE EN esperar_orden ¿no? Y CUANDO NO HAYA NADIE LOGEADO usuario_actual = NULL
+        - CORTAR LOOP CON ORDEN EN esperar_orden (LLAMANDO esperar_orden SOLO UNA VEZ DESDE MAIN) O CORTAR CON UN BOOL EN main que se MODIFIQUE DESDE esperar_orden CON PUNTERO
+        - INIESTA TIENE MISMA AFINIDAD CON PIQUE QUE CON GUARDIOLA?
 
 --------------------------------------------------------------------*/
 
@@ -35,7 +39,7 @@
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 
 
-// STRUCTS
+// --- STRUCTS
 
 
 typedef struct post{
@@ -55,13 +59,11 @@ typedef struct arreglo_posts{
 typedef struct usuario{
     char* nombre;
     heap_t* posts_sin_ver;
+    size_t id_txt;
 } usuario_t;
 
 
-// HASH DE USUARIOS - BORRAR ESTA LINEA
-
-
-// FUNCIONES
+//  --- FUNCIONES
 
 
 void esperar_orden(){
@@ -87,8 +89,9 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r"); //      SEGUIR SACANDO USUARIOS. 
 
     // LLAMAR FUNCION LOOP ESPERAR ORDEN
+    
     esperar_orden();
 
-    // VOLVER AQUI CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
+    // VOLVER AQUI CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
     return 0;
 }
