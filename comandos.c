@@ -1,23 +1,27 @@
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <string.h>
+#include "heap.h"
+#include "hash.h"
+#include "abb.h"
+#include "lista.h"
+#include "comandos.h"
 
 
-
-
-
-
-
-
-void login(hash_t* usuarios, usuario_t* usuario_activo){
+void login(hash_t* usuarios, usuario_t* usuario_activo){ // INGREESAR ALGO A ESTA FUNCIÓN DA SEG FAULT
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
     }
     char* user;
-    int buffer;
-    int longitud = getline(&user,&buffer,stdin);
+    size_t buffer;
+    ssize_t longitud = getline(&user,&buffer,stdin);
 
-    if (hash_pertenece(usuarios,stdin)){
-        usuario_activo = hash_obtener(usuarios,stdin);
-        printf("Hola %s\n",line);
+    if (hash_pertenece(usuarios,user)){ // DABA WARNINIG "STDIN" if (hash_pertenece(usuarios,stdin)){ 
+        usuario_activo = hash_obtener(usuarios,user); // DABA WARNINIG "STDIN" usuario_activo = hash_obtener(usuarios,stdin);
+        printf("Hola %s\n",user); // ESTABA Y NO COMPILABA printf("Hola %s\n",line);
     }else{
         printf("Error: usuario no existente\n");
     }

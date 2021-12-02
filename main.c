@@ -30,6 +30,7 @@
 --------------------------------------------------------------------*/
 
 
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -38,11 +39,11 @@
 #include "heap.h"
 #include "hash.h"
 #include "abb.h"
+#include "lista.h"
 #include "comandos.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define TAM_MAX_INGRESO 150
-#define _POSIX_C_SOURCE 200809L
 
 // --- STRUCTS
 
@@ -74,7 +75,7 @@ typedef struct usuario{
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = malloc(sizeof(char) * TAM_MAX_INGRESO);
-	int tam_buffer = 1000; // HACER CONSTANTE O VER DE DONDE SACAR.
+	size_t tam_buffer = 1000; // HACER CONSTANTE O VER DE DONDE SACAR.
 
     //no hace falta ponerle tamanio al buffer ni a ingreso, se lo pone solo getline
     //por lo menos en el tp1 no les puse y no tuve problema
@@ -83,16 +84,18 @@ void esperar_orden(hash_t* usuarios){
 
 
     while(!terminar){
-        int longitud = getline(&ingreso, &tam_buffer, stdin);
+        printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
+        ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
 
         if (strcmp(ingreso, "login\n") == 0){
             printf("QUERÉS LOGEARTE CHIGADO?\n");
             login(usuarios,usuario_activo);
+            // Propongo: usuario_activo = login(blabla)
 
         }else if(strcmp(ingreso, "logout\n") == 0){
             printf("QUERÉS salir CHIGADO?\n");
             logout(usuario_activo);
-            debugger();
+            // Propongo: usuario_activo = login(blabla) (y que retorne un NULL)
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
             printf("QUERÉS publicar CHIGADO?\n");
@@ -153,31 +156,16 @@ int main(int argc, char *argv[]){
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
     }
-    if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {//esto esta en py?? -- Nono, C de Cristiano. Cómo checkeaste vos si un archivo era valido en el tp1?
-
-    /* asi:
-
-    FILE* archi = fopen(direccion,"r");
-    if (!archi){
-        fprintf(stderr,"%s\n","Error: archivo fuente inaccesible");
-        return false;
-    }
-    */
-
+    if (access(argv[ARGUMENTO_NOMBRE_ARCHIVO], R_OK) == -1) {
         printf("Error: archivo fuente inaccesible"); 
         return -1;
     }
-
-
-
 
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
     
-
-
-    esperar_orden();
+    esperar_orden(hash_usuarios);
 
     //hash_destruir(hash_usuarios);
     // VOLVER ACA CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
