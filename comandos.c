@@ -15,7 +15,7 @@
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
 
     char* ingreso_login = malloc(sizeof(char) * TAM_MAX_INGRESO);
-    size_t buffer = 1000; // Fijar como constante o dejar sin definir, como dijo Joaco (dejar sin definir da warning)
+    size_t buffer;
     ssize_t nro_car = getline(&ingreso_login, &buffer, stdin);
     
     if (usuario_activo != NULL){

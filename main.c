@@ -75,7 +75,9 @@ void impresora_hash(hash_t* hash){
     hash_iter_t* iterador = hash_iter_crear(hash);
     printf("    Comienzo impresora hash\n");
     while(!hash_iter_al_final(iterador)){
-        printf("    %s", (hash_iter_ver_actual(iterador)));
+        char* clave_actual = hash_iter_ver_actual(iterador);
+        void* dato = hash_obtener(hash, clave_actual);
+        printf("    Nombre: %s     N°ID: %lu\n", clave_actual, ((usuario_t*)dato)->id_txt);
         hash_iter_avanzar(iterador);
     }
     printf("    Fin impresora hash\n");
@@ -87,7 +89,7 @@ void impresora_hash(hash_t* hash){
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = malloc(sizeof(char) * TAM_MAX_INGRESO);
-	size_t tam_buffer = 1000; // HACER CONSTANTE O VER DE DONDE SACAR.
+	size_t tam_buffer; 
 
     //no hace falta ponerle tamanio al buffer ni a ingreso, se lo pone solo getline
     //por lo menos en el tp1 no les puse y no tuve problema
@@ -101,11 +103,9 @@ void esperar_orden(hash_t* usuarios){
 
         if (strcmp(ingreso, "login\n") == 0){
             usuario_activo = login(usuarios, usuario_activo);
-            // Propongo: usuario_activo = login(blabla)
 
         }else if(strcmp(ingreso, "logout\n") == 0){
             usuario_activo = logout(usuario_activo);
-            // Propongo: usuario_activo = login(blabla) (y que retorne un NULL)
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
 
@@ -129,13 +129,20 @@ void esperar_orden(hash_t* usuarios){
 }
 
 
+int func_cmp_d_posts(const void* a, const void* b){
+    // Cómo sacar la distancia del cliente o del observador? como lo sabemos
+}
+
+
 usuario_t* crear_usuario(char* nombre, size_t id){
     usuario_t* usuario = malloc(sizeof(usuario));
     if (!usuario){
         return NULL;     
     }
     usuario->nombre = malloc(sizeof(char) * TAM_MAX_NOMBRE_USU);
+    if (usuario->nombre == NULL) return NULL;
     strcpy(usuario->nombre, nombre); 
+    // ACA IRÍA IDEA FUNC_CMP PARA CADA HEAP. Una funcion distinta para cada heap, con la id del observador como constante.
     usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
     usuario->id_txt = id;
     return usuario;
@@ -186,6 +193,8 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
+
+
 
     esperar_orden(hash_usuarios);
 
