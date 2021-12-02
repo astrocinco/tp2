@@ -88,30 +88,30 @@ void esperar_orden(hash_t* usuarios){
         ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
 
         if (strcmp(ingreso, "login\n") == 0){
-            printf("QUERÉS LOGEARTE CHIGADO?\n");
+            printf("    Debug: QUERÉS LOGEARTE CHIGADO?\n");
             login(usuarios,usuario_activo);
             // Propongo: usuario_activo = login(blabla)
 
         }else if(strcmp(ingreso, "logout\n") == 0){
-            printf("QUERÉS salir CHIGADO?\n");
+            printf("    Debug: QUERÉS salir CHIGADO?\n");
             logout(usuario_activo);
             // Propongo: usuario_activo = login(blabla) (y que retorne un NULL)
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
-            printf("QUERÉS publicar CHIGADO?\n");
+            printf("    Debug: QUERÉS publicar CHIGADO?\n");
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
-            printf("QUERÉS ver_siguiente CHIGADO?\n");
+            printf("    Debug: QUERÉS ver_siguiente CHIGADO?\n");
 
         }else if(strcmp(ingreso, "likear_post\n") == 0){
-            printf("QUERÉS likear CHIGADO?\n");
+            printf("    Debug: QUERÉS likear CHIGADO?\n");
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
-            printf("QUERÉS mostrar_likes CHIGADO?\n");
+            printf("    Debug: QUERÉS mostrar_likes CHIGADO?\n");
 
         }else if(strcmp(ingreso, "quit\n") == 0){
-        // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER
-            printf("quitEAMOS CHIGADO!\n");
+        // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
+            printf("    Debug: quitEAMOS CHIGADO!\n");
             terminar = true;
 
         }else{
@@ -142,7 +142,7 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
     ssize_t longitud = getline(&line,&capacidad,archivo); // PONER EZE TRUCO
     int id = 0;
 
-    while(longitud > 0){
+    while(longitud > 0){ // ESTO GUARDA LOS NOMBRES DE USUARIOS COMO CLAVES ¿NO?
         hash_guardar(hash,line,&id);
         id++;
         longitud = getline(&line,&capacidad,archivo);

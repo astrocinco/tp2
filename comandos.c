@@ -11,9 +11,29 @@
 #include "comandos.h"
 
 
-void login(hash_t* usuarios, usuario_t* usuario_activo){ // INGREESAR ALGO A ESTA FUNCIÓN DA SEG FAULT
+usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
+    // Por lo que interpreto de las pruebas, tenes que dejar que ingrese un usuario antes de decirle que se equivocó
+    char* ingreso_login;
+    size_t buffer = 1000; // Fijar como constante o dejar sin definir, como dijo Joaco (dejar sin definir da warning)
+    ssize_t nro_car = getline(&ingreso_login, &buffer, stdin);
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
+        return usuario_activo;
+    }
+    if (hash_pertenece(usuarios, ingreso_login)){
+        usuario_activo = hash_obtener(usuarios, ingreso_login);
+        printf("Hola %s", ingreso_login); // Sin \n porque nos nombres de usuarios en hash ya tienen \n
+    }else{
+        printf("Error: usuario no existente\n");
+    }
+    return usuario_activo;
+}
+
+
+void login_2(hash_t* usuarios, usuario_t* usuario_activo){ // INGREESAR ALGO A ESTA FUNCIÓN DA SEG FAULT
+    if (usuario_activo != NULL){
+        printf("Error: Ya habia un usuario loggeado\n" );
+        // Acá debería co
     }
     char* user;
     size_t buffer;
