@@ -50,11 +50,10 @@
 
 
 typedef struct post{
-
     size_t nro_id;
     char* creador;
     char* contenido;
-    lista_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u)
+    abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
 } post_t;
 
 
@@ -69,6 +68,12 @@ typedef struct usuario{
     heap_t* feed; // posts_sin_ver
     size_t id_txt;
 } usuario_t;
+
+
+typedef struct dupla{
+    size_t prioridad;
+    post_t* post;
+} dupla_t;
 
 
 //  DEBUGGERS - BORRAR PARA ENTREGAR
@@ -100,7 +105,7 @@ void esperar_orden(hash_t* usuarios){
 
     while(!terminar){
         printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
-        ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
+        size_t longitud = getline(&ingreso, &tam_buffer, stdin);
 
         if (strcmp(ingreso, "login\n") == 0){
             usuario_activo = login(usuarios, usuario_activo);
@@ -129,34 +134,35 @@ void esperar_orden(hash_t* usuarios){
     return;
 }
 
-int func_cmp_d_posts(const void* a, const void* b){
-    /*
-    usuario 1 = el logueado
-    usuario 2 = el otro
+int cmp_posts(const void* a, const void* b){
+    // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
+    const dupla_t* dupla1 = (dupla_t*)a;
+    const dupla_t* dupla2 = (dupla_t*)b;
 
-    prioridad_post_a_publicar = (u1->posicion - u2->posicion)
+    size_t prioridad_1 = dupla1->prioridad;
+    size_t prioridad_2 = dupla2->prioridad;
 
+    size_t dif_prioridad = prioridad_1 - prioridad_2;
 
-    heap_encolar(prioridad_post_a_publicar,post);
-
-    */
-    // Cómo sacar la distancia del cliente o del observador? como lo sabemos
+    // En caso de igual prioridad, el que fue publicado primero tiene prioridad
+    if (dif_prioridad == 0){
+        size_t orden_post_1 = dupla1->post->nro_id;
+        size_t orden_post_2 = dupla2->post->nro_id;
+        dif_prioridad = orden_post_2 - orden_post_1;
+    }
+    return dif_prioridad;
 }
-/*propuesta:
 
-    hash_iterar(post_a_publicar);
 
-*/
 usuario_t* crear_usuario(char* nombre, size_t id){
     usuario_t* usuario = malloc(sizeof(usuario_t));
-    if (!usuario){
-        return NULL;     
-    }
+    if (!usuario) return NULL;
+
     usuario->nombre = malloc(sizeof(char) * TAM_MAX_NOMBRE_USU);
     if (usuario->nombre == NULL) return NULL;
+
     strcpy(usuario->nombre, nombre); 
-    // ACA IRÍA IDEA FUNC_CMP PARA CADA HEAP. Una funcion distinta para cada heap, con la id del observador como constante.
-    usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
+    usuario->feed = heap_crear(cmp_posts); 
     usuario->id_txt = id;
     return usuario;
 }
@@ -183,20 +189,21 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad;
-    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
+    size_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
     size_t id = 0;
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, line, usuario);
         id++;
         longitud = getline(&line,&capacidad,archivo);
-    }//esto esta incompleto -Que le falta? Creo que ahora ya está
-    impresora_hash(hash);
+    }//esto esta incompleto --- Que le falta? Creo que ahora ya está
+    //impresora_hash(hash);
     return hash;
 }
 
 
 int main(int argc, char *argv[]){
+    printf("    Debug: Comienza el programa\n");
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
@@ -208,8 +215,6 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-
-
 
     esperar_orden(hash_usuarios);
 
