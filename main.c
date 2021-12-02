@@ -70,6 +70,17 @@ typedef struct usuario{
 } usuario_t;
 
 
+//  DEBUGGERS - BORRAR PARA ENTREGAR
+void impresora_hash(hash_t* hash){
+    hash_iter_t* iterador = hash_iter_crear(hash);
+    printf("    Comienzo impresora hash\n");
+    while(!hash_iter_al_final(iterador)){
+        printf("    %s", (hash_iter_ver_actual(iterador)));
+        hash_iter_avanzar(iterador);
+    }
+    printf("    Fin impresora hash\n");
+}
+
 //  --- FUNCIONES
 
 
@@ -130,8 +141,8 @@ usuario_t* crear_usuario(char* nombre, size_t id){
         return NULL;     
     }
     usuario->nombre = malloc(sizeof(char) * TAM_MAX_NOMBRE_USU);
-    strcpy(usuario->nombre,nombre); 
-    //usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
+    strcpy(usuario->nombre, nombre); 
+    usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
     usuario->id_txt = id;
     return usuario;
 }
@@ -146,32 +157,30 @@ void destruir_post(void* post_void){
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
     free(usuario->nombre);
-    heap_destruir(usuario->feed, destruir_post); // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE 
-    // DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
+    heap_destruir(usuario->feed, NULL); // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
+    // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
     free(usuario);
 }
 
 
-hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
+hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad;
     ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO
     size_t id = 0;
-    printf("        main.c 159\n");
-    while(longitud > 0){ // ESTO GUARDA LOS NOMBRES DE USUARIOS COMO CLAVES ¿NO?
+    while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, line, usuario);
         id++;
         longitud = getline(&line,&capacidad,archivo);
-    }//esto esta incompleto
-    printf("        main.c 166\n");
+    }//esto esta incompleto -Que le falta? Creo que ahora ya está
+    impresora_hash(hash);
     return hash;
 }
 
 
 int main(int argc, char *argv[]){
-    printf("        main.c 171\n");
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
@@ -181,13 +190,11 @@ int main(int argc, char *argv[]){
         return -1;
     }
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
-    printf("        main.c 180\n");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-    printf("        main.c 184\n");
+
     esperar_orden(hash_usuarios);
 
-    //hash_destruir(hash_usuarios);
-    // VOLVER ACA CUANDO SE LLAME A QUIT EN esperar_orden. ELIMINAR AQUI TODAS LAS ESTRUCTURAS, LIBERAR MEMORIA
+    hash_destruir(hash_usuarios);
     return 0;
 }
