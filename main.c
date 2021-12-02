@@ -50,6 +50,7 @@
 
 
 typedef struct post{
+
     size_t nro_id;
     char* creador;
     char* contenido;
@@ -128,14 +129,26 @@ void esperar_orden(hash_t* usuarios){
     return;
 }
 
-
 int func_cmp_d_posts(const void* a, const void* b){
+    /*
+    usuario 1 = el logueado
+    usuario 2 = el otro
+
+    prioridad_post_a_publicar = (u1->posicion - u2->posicion)
+
+
+    heap_encolar(prioridad_post_a_publicar,post);
+
+    */
     // Cómo sacar la distancia del cliente o del observador? como lo sabemos
 }
+/*propuesta:
 
+    hash_iterar(post_a_publicar);
 
+*/
 usuario_t* crear_usuario(char* nombre, size_t id){
-    usuario_t* usuario = malloc(sizeof(usuario));
+    usuario_t* usuario = malloc(sizeof(usuario_t));
     if (!usuario){
         return NULL;     
     }
@@ -149,6 +162,7 @@ usuario_t* crear_usuario(char* nombre, size_t id){
 }
 
 
+
 void destruir_post(void* post_void){
     post_t* post = (post_t*)post_void; // Para evitar warnings
     // HACER
@@ -158,7 +172,8 @@ void destruir_post(void* post_void){
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
     free(usuario->nombre);
-    heap_destruir(usuario->feed, NULL); // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
+    heap_destruir(usuario->feed, NULL); 
+    // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
     // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
     free(usuario);
 }
@@ -168,7 +183,7 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad;
-    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO
+    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
     size_t id = 0;
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
