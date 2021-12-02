@@ -44,6 +44,7 @@
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define TAM_MAX_INGRESO 150
+#define TAM_MAX_NOMBRE_USU 50
 
 // --- STRUCTS
 
@@ -89,12 +90,12 @@ void esperar_orden(hash_t* usuarios){
 
         if (strcmp(ingreso, "login\n") == 0){
             printf("    Debug: QUERÉS LOGEARTE CHIGADO?\n");
-            login(usuarios,usuario_activo);
+            usuario_activo = login(usuarios, usuario_activo);
             // Propongo: usuario_activo = login(blabla)
 
         }else if(strcmp(ingreso, "logout\n") == 0){
             printf("    Debug: QUERÉS salir CHIGADO?\n");
-            logout(usuario_activo);
+            usuario_activo = logout(usuario_activo);
             // Propongo: usuario_activo = login(blabla) (y que retorne un NULL)
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
@@ -123,35 +124,54 @@ void esperar_orden(hash_t* usuarios){
 }
 
 
-bool crear_usuario(hash_t* hash,char* nombre,int id){
+usuario_t* crear_usuario(char* nombre, size_t id){
     usuario_t* usuario = malloc(sizeof(usuario));
     if (!usuario){
-        return false;     
-    } 
-    strcpy(usuario->nombre,nombre);
+        return NULL;     
+    }
+    usuario->nombre = malloc(sizeof(char) * TAM_MAX_NOMBRE_USU);
+    strcpy(usuario->nombre,nombre); 
     //usuario->feed;//  = heap_crear(/* cmp */); // -- HACER
     usuario->id_txt = id;
-    return true;
+    return usuario;
+}
+
+
+void destruir_post(void* post_void){
+    post_t* post = (post_t*)post_void; // Para evitar warnings
+    // HACER
+}
+
+
+void destruir_usuario(void* usuario_void){
+    usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
+    free(usuario->nombre);
+    heap_destruir(usuario->feed, destruir_post); // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE 
+    // DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
+    free(usuario);
 }
 
 
 hash_t* guardar_usuarios_txt_hash(FILE* archivo){ // TERMINAR
-    hash_t* hash = hash_crear(free);
+    hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad;
-    ssize_t longitud = getline(&line,&capacidad,archivo); // PONER EZE TRUCO
-    int id = 0;
-
+    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO
+    size_t id = 0;
+    printf("        main.c 159\n");
     while(longitud > 0){ // ESTO GUARDA LOS NOMBRES DE USUARIOS COMO CLAVES ¿NO?
-        hash_guardar(hash,line,&id);
+        usuario_t* usuario = crear_usuario(line, id);
+        hash_guardar(hash, line, usuario);
         id++;
         longitud = getline(&line,&capacidad,archivo);
     }//esto esta incompleto
+    printf("        main.c 166\n");
     return hash;
 }
 
 
 int main(int argc, char *argv[]){
+    printf("        main.c 171\n");
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
@@ -160,11 +180,11 @@ int main(int argc, char *argv[]){
         printf("Error: archivo fuente inaccesible"); 
         return -1;
     }
-
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
+    printf("        main.c 180\n");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-    
+    printf("        main.c 184\n");
     esperar_orden(hash_usuarios);
 
     //hash_destruir(hash_usuarios);

@@ -16,7 +16,7 @@ typedef struct usuario usuario_t;
 void login_2(hash_t* usuarios, usuario_t* usuario_activo); // BORRAR SI NO LO USAMOS
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 // PROBABLEMENTE NO VAYA VOID. PONER TIPO CORRECTO EN .H Y .C
-void logout(usuario_t* usuario_activo);
+usuario_t* logout(usuario_t* usuario_activo);
 
 void publicar();
 
