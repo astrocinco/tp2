@@ -100,34 +100,28 @@ void esperar_orden(hash_t* usuarios){
         ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
 
         if (strcmp(ingreso, "login\n") == 0){
-            printf("    Debug: QUERÉS LOGEARTE CHIGADO?\n");
             usuario_activo = login(usuarios, usuario_activo);
             // Propongo: usuario_activo = login(blabla)
 
         }else if(strcmp(ingreso, "logout\n") == 0){
-            printf("    Debug: QUERÉS salir CHIGADO?\n");
             usuario_activo = logout(usuario_activo);
             // Propongo: usuario_activo = login(blabla) (y que retorne un NULL)
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
-            printf("    Debug: QUERÉS publicar CHIGADO?\n");
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
-            printf("    Debug: QUERÉS ver_siguiente CHIGADO?\n");
 
         }else if(strcmp(ingreso, "likear_post\n") == 0){
-            printf("    Debug: QUERÉS likear CHIGADO?\n");
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
-            printf("    Debug: QUERÉS mostrar_likes CHIGADO?\n");
 
         }else if(strcmp(ingreso, "quit\n") == 0){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
-            printf("    Debug: quitEAMOS CHIGADO!\n");
+            printf("Quiting");
             terminar = true;
 
         }else{
-            printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO, CHIGADO\n");
+            printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
         }
     }
     free(ingreso);
