@@ -99,7 +99,6 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
         return NULL;
     }
 
-    printf("asd\n");
     arreglo_st->arreglo = malloc(sizeof(void*) * CAP_CANT_POSTS);
     arreglo_st->cantidad = 0;
     return arreglo_st;
@@ -196,7 +195,6 @@ void esperar_orden(hash_t* usuarios){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
             printf("Quiting");
             terminar = true;
-
         }else{
             printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
         }
@@ -240,6 +238,12 @@ int main(int argc, char *argv[]){
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
     //printf("    Debug: main.c 218\n");
+
+    hash_iter_t* iter = hash_iter_crear(hash_usuarios);
+    while(!hash_iter_al_final(iter)){
+        printf("%s", hash_iter_ver_actual(iter));
+        hash_iter_avanzar(iter);
+    }
 
     esperar_orden(hash_usuarios);
     
