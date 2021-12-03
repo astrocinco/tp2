@@ -4,14 +4,14 @@
  -- TO DO --
         ARREGLO DE POSTS. 
             STRUCT POST (ID, CREADOR, CONTENIDO, ABB LIKES)          -- HECHO
-        HASH DE USUARIOS
+        HASH DE USUARIOS                                             -- HECHO
             STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)   -- HECHO
-        HACER CMP PARA HEAP USANDO id_txt del struct "usuario"
+        HACER CMP PARA HEAP                                          -- HECHO
     
 
  -- FUNCIONES QUE DEBE TENER --
-        LOGIN
-        LOGOUT
+        LOGIN                           -- HECHO
+        LOGOUT                          -- HECHO
         PUBLICAR POST
         VER PROX POST
         LIKEAR POST POR ID
@@ -43,8 +43,10 @@
 #include "comandos.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
+#define CAP_CANT_POSTS 50ul
 #define TAM_MAX_INGRESO 150
 #define TAM_MAX_NOMBRE_USU 50
+
 
 // --- STRUCTS
 
@@ -92,16 +94,24 @@ void impresora_hash(hash_t* hash){
 //  --- FUNCIONES
 
 
+arreglo_posts_t* crear_arreglo(){
+    arreglo_posts_t* arreglo_st = malloc(sizeof(arreglo_posts_t));
+    if (arreglo_st = NULL) return NULL;
+
+    arreglo_st->arreglo = malloc(sizeof(post_t*) * CAP_CANT_POSTS);
+    arreglo_st->cantidad = 0;
+    return arreglo_st;
+}
+
+
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = NULL;
 	size_t tam_buffer; 
 
-    //no hace falta ponerle tamanio al buffer ni a ingreso, se lo pone solo getline
-    //por lo menos en el tp1 no les puse y no tuve problema
-
     usuario_t* usuario_activo = NULL;
-
+    arreglo_posts_t* arreglo_posts = crear_arreglo();
+    
 
     while(!terminar){
         //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
@@ -114,6 +124,7 @@ void esperar_orden(hash_t* usuarios){
             usuario_activo = logout(usuario_activo);
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
+            publicar(usuario_activo, arreglo_posts);
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
 
@@ -131,6 +142,8 @@ void esperar_orden(hash_t* usuarios){
         }
     }
     free(ingreso);
+    free(arreglo_posts->arreglo);
+    free(arreglo_posts);
     return;
 }
 
@@ -168,13 +181,6 @@ usuario_t* crear_usuario(char* nombre, size_t id){
 }
 
 
-
-void destruir_post(void* post_void){
-    post_t* post = (post_t*)post_void; // Para evitar warnings
-    // HACER
-}
-
-
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
     free(usuario->nombre);
@@ -182,6 +188,12 @@ void destruir_usuario(void* usuario_void){
     // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
     // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
     free(usuario);
+}
+
+
+void destruir_post(void* post_void){
+    post_t* post = (post_t*)post_void; // Para evitar warnings
+    // HACER
 }
 
 
@@ -194,7 +206,7 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     //printf("    Debug: main.c 194\n");
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
-        hash_guardar(hash, line, usuario);
+        hash_guardar(hash, usuario->nombre, usuario); // Antes estaba hash_guardar(hash, line, usuario); Pero para mi "line" iba a fallar, cuando se liberara o se sobreescribiera
         id++;
         //printf("    Debug: main.c longitud: %lu  %s", longitud, line);
         longitud = getline(&line,&capacidad,archivo);

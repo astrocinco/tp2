@@ -12,18 +12,20 @@
 #include "lista.h"
 
 typedef struct usuario usuario_t;
+typedef struct arreglo_posts arreglo_posts_t;
+typedef struct post post_t;
+typedef struct dupla;
 
-void login_2(hash_t* usuarios, usuario_t* usuario_activo); // BORRAR SI NO LO USAMOS
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
-// PROBABLEMENTE NO VAYA VOID. PONER TIPO CORRECTO EN .H Y .C
+
 usuario_t* logout(usuario_t* usuario_activo);
 
-void publicar();
+void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts);
 
 void ver_prox();
 
 void likear();
-// PROBABLEMENTE NO VAYA VOID. PONER TIPO CORRECTO EN .H Y .C
+
 void ver_likes();
 
 void debugger();
