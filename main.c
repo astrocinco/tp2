@@ -47,36 +47,6 @@
 #define TAM_MAX_INGRESO 150
 #define TAM_MAX_NOMBRE_USU 50
 
-
-// --- STRUCTS
-
-typedef struct usuario{
-    char* nombre;
-    heap_t* feed; // posts_sin_ver
-    size_t id_txt;
-} usuario_t;
-
-typedef struct post{
-    size_t nro_id;
-    usuario_t* creador;
-    char* contenido;
-    abb_t* likes;
-} post_t;
-
-
-typedef struct arreglo_posts{
-    post_t** arreglo;
-    size_t cantidad;
-} arreglo_posts_t;
-
-//----------------------revisar dobles declaraciones 
-
-typedef struct dupla{
-    size_t prioridad;
-    post_t* post;
-} dupla_t;
-
-
 //  DEBUGGERS - BORRAR PARA ENTREGAR
 void impresora_hash(hash_t* hash){
     hash_iter_t* iterador = hash_iter_crear(hash);
