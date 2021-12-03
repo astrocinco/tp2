@@ -20,7 +20,7 @@ usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 
 usuario_t* logout(usuario_t* usuario_activo);
 
-void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts);
+void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios);
 
 void ver_prox();
 

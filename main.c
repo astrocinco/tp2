@@ -48,31 +48,31 @@
 #define TAM_MAX_NOMBRE_USU 50
 
 
-// --- STRUCTS
+// --- STRUCTS 
 
 
-typedef struct post{
-    size_t nro_id;
-    char* creador;
-    char* contenido;
-    abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
-} post_t;
-
-
-typedef struct arreglo_posts{
-    post_t** arreglo;
-    size_t cantidad;
-} arreglo_posts_t;
-
-
-typedef struct usuario{
+typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
     char* nombre;
     heap_t* feed; // posts_sin_ver
     size_t id_txt;
 } usuario_t;
 
 
-typedef struct dupla{
+typedef struct post{
+    size_t nro_id;
+    usuario_t* creador;
+    char* contenido;
+    abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
+} post_t;
+
+
+typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+    post_t** arreglo;
+    size_t cantidad;
+} arreglo_posts_t;
+
+
+typedef struct dupla{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
     size_t prioridad;
     post_t* post;
 } dupla_t;
@@ -83,7 +83,7 @@ void impresora_hash(hash_t* hash){
     hash_iter_t* iterador = hash_iter_crear(hash);
     printf("    Comienzo impresora hash\n");
     while(!hash_iter_al_final(iterador)){
-        char* clave_actual = hash_iter_ver_actual(iterador);
+        const char* clave_actual = hash_iter_ver_actual(iterador);
         void* dato = hash_obtener(hash, clave_actual);
         printf("    Nombre: %s     N°ID: %lu\n", clave_actual, ((usuario_t*)dato)->id_txt);
         hash_iter_avanzar(iterador);
@@ -96,11 +96,30 @@ void impresora_hash(hash_t* hash){
 
 arreglo_posts_t* crear_arreglo(){
     arreglo_posts_t* arreglo_st = malloc(sizeof(arreglo_posts_t));
-    if (arreglo_st = NULL) return NULL;
+    if (arreglo_st == NULL) return NULL;
 
     arreglo_st->arreglo = malloc(sizeof(post_t*) * CAP_CANT_POSTS);
     arreglo_st->cantidad = 0;
     return arreglo_st;
+}
+
+
+void destruir_usuario(void* usuario_void){
+    usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
+    free(usuario->nombre);
+    heap_destruir(usuario->feed, NULL); 
+    // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
+    // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
+    free(usuario);
+}
+
+
+void destruir_post(void* post_void){
+    post_t* post = (post_t*)post_void; // Para evitar warnings
+
+    abb_destruir(post->likes);
+    free(post->contenido);
+    free(post);
 }
 
 
@@ -113,48 +132,6 @@ void destruir_arreglo(arreglo_posts_t* arreglo_st){
 }
 
 
-void esperar_orden(hash_t* usuarios){
-    bool terminar = false;
-	char* ingreso = NULL;
-	size_t tam_buffer; 
-
-    usuario_t* usuario_activo = NULL;
-    arreglo_posts_t* arreglo_posts = crear_arreglo();
-    
-
-    while(!terminar){
-        //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
-        ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
-
-        if (strcmp(ingreso, "login\n") == 0){
-            usuario_activo = login(usuarios, usuario_activo);
-
-        }else if(strcmp(ingreso, "logout\n") == 0){
-            usuario_activo = logout(usuario_activo);
-
-        }else if(strcmp(ingreso, "publicar\n") == 0){
-            publicar(usuario_activo, arreglo_posts);
-
-        }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
-
-        }else if(strcmp(ingreso, "likear_post\n") == 0){
-
-        }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
-
-        }else if(strcmp(ingreso, "quit\n") == 0){
-        // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
-            printf("Quiting");
-            terminar = true;
-
-        }else{
-            printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
-        }
-    }
-    free(ingreso);
-    destruir_arreglo(arreglo_posts);
-    return;
-}
-
 int cmp_posts(const void* a, const void* b){
     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
     const dupla_t* dupla1 = (dupla_t*)a;
@@ -163,7 +140,7 @@ int cmp_posts(const void* a, const void* b){
     size_t prioridad_1 = dupla1->prioridad;
     size_t prioridad_2 = dupla2->prioridad;
 
-    size_t dif_prioridad = prioridad_1 - prioridad_2;
+    int dif_prioridad = prioridad_1 - prioridad_2;
 
     // En caso de igual prioridad, el que fue publicado primero tiene prioridad
     if (dif_prioridad == 0){
@@ -189,22 +166,46 @@ usuario_t* crear_usuario(char* nombre, size_t id){
 }
 
 
-void destruir_usuario(void* usuario_void){
-    usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
-    free(usuario->nombre);
-    heap_destruir(usuario->feed, NULL); 
-    // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
-    // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
-    free(usuario);
-}
+void esperar_orden(hash_t* usuarios){
+    bool terminar = false;
+	char* ingreso = NULL;
+	size_t tam_buffer; 
 
+    usuario_t* usuario_activo = NULL;
+    arreglo_posts_t* arreglo_posts = crear_arreglo();
+    
 
-void destruir_post(void* post_void){
-    post_t* post = (post_t*)post_void; // Para evitar warnings
+    while(!terminar){
+        //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
+        getline(&ingreso, &tam_buffer, stdin);
 
-    abb_destruir(post->likes);
-    free(post->contenido);
-    free(post);
+        if (strcmp(ingreso, "login\n") == 0){
+            usuario_activo = login(usuarios, usuario_activo);
+
+        }else if(strcmp(ingreso, "logout\n") == 0){
+            usuario_activo = logout(usuario_activo);
+
+        }else if(strcmp(ingreso, "publicar\n") == 0){
+            publicar(usuario_activo, arreglo_posts, usuarios);
+
+        }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
+
+        }else if(strcmp(ingreso, "likear_post\n") == 0){
+
+        }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
+
+        }else if(strcmp(ingreso, "quit\n") == 0){
+        // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
+            printf("Quiting");
+            terminar = true;
+
+        }else{
+            printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
+        }
+    }
+    free(ingreso);
+    destruir_arreglo(arreglo_posts);
+    return;
 }
 
 
@@ -244,7 +245,7 @@ int main(int argc, char *argv[]){
     //printf("    Debug: main.c 218\n");
 
     esperar_orden(hash_usuarios);
-    
+
     hash_destruir(hash_usuarios);
     return 0;
 }

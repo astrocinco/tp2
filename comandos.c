@@ -12,25 +12,25 @@
 #include "comandos.h"
 
 
-typedef struct post{
+typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+    char* nombre;
+    heap_t* feed; // posts_sin_ver
+    size_t id_txt;
+} usuario_t;
+
+
+typedef struct post{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
     size_t nro_id;
-    char* creador;
+    usuario_t* creador;
     char* contenido;
     abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
 } post_t;
 
 
-typedef struct arreglo_posts{
+typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
     post_t** arreglo;
     size_t cantidad;
 } arreglo_posts_t;
-
-
-typedef struct usuario{
-    char* nombre;
-    heap_t* feed; // posts_sin_ver
-    size_t id_txt;
-} usuario_t;
 
 
 typedef struct dupla{
@@ -42,9 +42,7 @@ typedef struct dupla{
 // AUXILIARES
 
 
-int cmp_alfa_usuarios(void* a, void* b){
-    char* nombre_liker_1 = (char*)a;
-    char* nombre_liker_2 = (char*)a;
+int cmp_alfa_usuarios(const char* nombre_liker_1, const char* nombre_liker_2){
     int diferencia = 0;
     int contador = 0;
     while(diferencia == 0){
@@ -75,13 +73,26 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
 }
 
 
+dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
+    dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
+    if (nueva_dupla == NULL) return NULL;
+
+    ssize_t prioridad = (receptor->id_txt) - (publicador->id_txt);
+    if (prioridad < 0) prioridad = prioridad * (-1);
+    nueva_dupla->prioridad = prioridad;
+
+    nueva_dupla->post = post;
+    return nueva_dupla;
+}
+
+
 // FUNCIONES PARA COMANDOS
 
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
     char* ingreso_login = NULL;
     size_t buffer;
-    ssize_t nro_car = getline(&ingreso_login, &buffer, stdin);
+    getline(&ingreso_login, &buffer, stdin);
     
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
@@ -109,16 +120,27 @@ usuario_t* logout(usuario_t* usuario_activo){
 }
 
 
-void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts){
+void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
     char* ingreso_publicar = NULL;
     size_t buffer;
-    ssize_t nro_car = getline(&ingreso_publicar, &buffer, stdin);
+    getline(&ingreso_publicar, &buffer, stdin);
 
     if (usuario_activo == NULL){
         printf("Error: no habia usuario loggeado.\n" );
         return;
     }
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
+
+    hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
+
+    while(!hash_iter_al_final(iterador_usu)){
+        const char* nombre_usu = hash_iter_ver_actual(iterador_usu);
+        usuario_t* usuario_poner_feed = hash_obtener(usuarios, nombre_usu);
+        if (usuario_poner_feed == usuario_activo) continue; // DEJAR ESTO SI NO PUBLICAR EN TU PROPIO FEED
+        dupla_t* dupla = crear_dupla(usuario_activo, usuario_poner_feed, nuevo_post);
+        heap_encolar(usuario_poner_feed->feed, dupla);
+    }
+    printf("    Debug: Publicaste wey\n");
 }
 
 
