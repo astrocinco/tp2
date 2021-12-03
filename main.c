@@ -94,7 +94,7 @@ void impresora_hash(hash_t* hash){
 
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
-	char* ingreso = malloc(sizeof(char) * TAM_MAX_INGRESO);
+	char* ingreso = NULL;
 	size_t tam_buffer; 
 
     //no hace falta ponerle tamanio al buffer ni a ingreso, se lo pone solo getline
@@ -104,8 +104,8 @@ void esperar_orden(hash_t* usuarios){
 
 
     while(!terminar){
-        printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
-        size_t longitud = getline(&ingreso, &tam_buffer, stdin);
+        //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
+        ssize_t longitud = getline(&ingreso, &tam_buffer, stdin);
 
         if (strcmp(ingreso, "login\n") == 0){
             usuario_activo = login(usuarios, usuario_activo);
@@ -189,21 +189,24 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad;
-    size_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
+    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
     size_t id = 0;
+    //printf("    Debug: main.c 194\n");
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, line, usuario);
         id++;
+        //printf("    Debug: main.c longitud: %lu  %s", longitud, line);
         longitud = getline(&line,&capacidad,archivo);
     }//esto esta incompleto --- Que le falta? Creo que ahora ya está
     //impresora_hash(hash);
+    free(line);
     return hash;
 }
 
 
 int main(int argc, char *argv[]){
-    printf("    Debug: Comienza el programa\n");
+    //printf("    Debug: Comienza el programa\n");
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
@@ -215,6 +218,7 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
+    //printf("    Debug: main.c 218\n");
 
     esperar_orden(hash_usuarios);
 

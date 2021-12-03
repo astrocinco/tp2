@@ -14,9 +14,9 @@
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
 
-    char* ingreso_login = malloc(sizeof(char) * TAM_MAX_INGRESO);
+    char* ingreso_login = NULL;
     size_t buffer;
-    size_t nro_car = getline(&ingreso_login, &buffer, stdin);
+    ssize_t nro_car = getline(&ingreso_login, &buffer, stdin);
     
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
@@ -28,6 +28,7 @@ usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
     }else{
         printf("Error: usuario no existente\n");
     }
+    free(ingreso_login);
     return usuario_activo;
 }
 
