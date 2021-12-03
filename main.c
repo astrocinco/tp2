@@ -186,7 +186,7 @@ void esperar_orden(hash_t* usuarios){
             publicar(usuario_activo, arreglo_posts,usuarios);
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
-
+            ver_prox(usuario_activo);
         }else if(strcmp(ingreso, "likear_post\n") == 0){
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){

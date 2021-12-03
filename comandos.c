@@ -130,22 +130,15 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
 
     hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
-    printf("antes del while\n");
     while(!hash_iter_al_final(iterador_usu)){
-        printf("entro al while\n");
         const char* nombre_usu = hash_iter_ver_actual(iterador_usu);
         usuario_t* usuario_poner_feed = hash_obtener(usuarios, nombre_usu);
-        printf("declaraciones\n");
         if (usuario_poner_feed != usuario_activo){
-            printf("entra al if\n");
             dupla_t* dupla = crear_dupla(usuario_activo, usuario_poner_feed, nuevo_post);
             heap_encolar(usuario_poner_feed->feed, dupla);
-            printf("heap encolar\n");
-            
             hash_iter_avanzar(iterador_usu);
-            const char* nombre_usu = hash_iter_ver_actual(iterador_usu);
-            usuario_t* usuario_poner_feed = hash_obtener(usuarios, nombre_usu);
-            printf("actualiza nombre y usuario\n");
+        }else{
+            hash_iter_avanzar(iterador_usu);
         }
     }
     printf("    Debug: Publicaste wey\n");
