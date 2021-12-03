@@ -23,7 +23,7 @@ typedef struct post{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VE
     size_t nro_id;
     usuario_t* creador;
     char* contenido;
-    abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
+    abb_t* likes; 
 } post_t;
 
 
@@ -41,7 +41,7 @@ typedef struct dupla{
 
 // AUXILIARES
 
-
+/*
 int cmp_alfa_usuarios(const char* nombre_liker_1, const char* nombre_liker_2){
     int diferencia = 0;
     int contador = 0;
@@ -55,7 +55,7 @@ int cmp_alfa_usuarios(const char* nombre_liker_1, const char* nombre_liker_2){
     printf("ERROR EN CMP DE ALFABETICO\n");
     return NULL; // NO DEBERÍA LLEGAR ACÁ
 }
-
+*/
 
 post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
     post_t* nuevo_post = malloc(sizeof(post_t*));
@@ -64,14 +64,13 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     char* ingreso_copiado = malloc(sizeof(char*) * TAM_MAX_INGRESO);
 
     nuevo_post->nro_id = arreglo_st->cantidad;
-    nuevo_post->creador = usuario_activo;
+    nuevo_post->creador = usuario_activo->nombre;
     strcpy(ingreso_copiado, ingreso);
     nuevo_post->contenido = ingreso_copiado;
-    nuevo_post->likes = abb_crear(cmp_alfa_usuarios, NULL);
+    nuevo_post->likes = abb_crear(strcmp, NULL);
 
     return nuevo_post;
 }
-
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
@@ -84,7 +83,6 @@ dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     nueva_dupla->post = post;
     return nueva_dupla;
 }
-
 
 // FUNCIONES PARA COMANDOS
 
@@ -131,7 +129,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
     }
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
 
-    hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
+       hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
 
     while(!hash_iter_al_final(iterador_usu)){
         const char* nombre_usu = hash_iter_ver_actual(iterador_usu);
@@ -144,7 +142,14 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
 }
 
 
-void ver_prox(){
+void ver_prox(usuario_t* usuario_activo){
+    if (heap_esta_vacio(usuario_activo->feed) || usuario_activo == NULL){
+        printf("Usuario no loggeado o no hay mas posts para ver\n");
+    }
+    post_t* post = heap_desencolar(usuario_activo->feed);
+    printf("Post ID %lu\n",post->nro_id);
+    printf("%s dijo: %s\n",post->creador->nombre,post->contenido);
+    printf("Likes: %lu\n", abb_cantidad(post->likes));
 
 }
 

@@ -48,31 +48,30 @@
 #define TAM_MAX_NOMBRE_USU 50
 
 
-// --- STRUCTS 
+// --- STRUCTS
 
-
-typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+typedef struct usuario{
     char* nombre;
     heap_t* feed; // posts_sin_ver
     size_t id_txt;
 } usuario_t;
 
-
 typedef struct post{
     size_t nro_id;
     usuario_t* creador;
     char* contenido;
-    abb_t* likes; //lo hice lista asi mientras lo recorremos mostrando y es O(u). // Me parece que no, que tiene que ser ABB así se puede leer in-order. Leer in order no es O(u) tambien?
+    abb_t* likes;
 } post_t;
 
 
-typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+typedef struct arreglo_posts{
     post_t** arreglo;
     size_t cantidad;
 } arreglo_posts_t;
 
+//----------------------revisar dobles declaraciones 
 
-typedef struct dupla{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+typedef struct dupla{
     size_t prioridad;
     post_t* post;
 } dupla_t;
@@ -94,15 +93,17 @@ void impresora_hash(hash_t* hash){
 //  --- FUNCIONES
 
 
-arreglo_posts_t* crear_arreglo(){
+arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
     arreglo_posts_t* arreglo_st = malloc(sizeof(arreglo_posts_t));
-    if (arreglo_st == NULL) return NULL;
+    if (arreglo_st == NULL){
+        return NULL;
+    }
 
-    arreglo_st->arreglo = malloc(sizeof(post_t*) * CAP_CANT_POSTS);
+    printf("asd\n");
+    arreglo_st->arreglo = malloc(sizeof(void*) * CAP_CANT_POSTS);
     arreglo_st->cantidad = 0;
     return arreglo_st;
 }
-
 
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
@@ -122,7 +123,6 @@ void destruir_post(void* post_void){
     free(post);
 }
 
-
 void destruir_arreglo(arreglo_posts_t* arreglo_st){
     for (size_t i = 0; i < arreglo_st->cantidad; i++){
         destruir_post(arreglo_st->arreglo[i]);
@@ -130,7 +130,6 @@ void destruir_arreglo(arreglo_posts_t* arreglo_st){
     free(arreglo_st->arreglo);
     free(arreglo_st);
 }
-
 
 int cmp_posts(const void* a, const void* b){
     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
@@ -165,7 +164,6 @@ usuario_t* crear_usuario(char* nombre, size_t id){
     return usuario;
 }
 
-
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = NULL;
@@ -186,7 +184,7 @@ void esperar_orden(hash_t* usuarios){
             usuario_activo = logout(usuario_activo);
 
         }else if(strcmp(ingreso, "publicar\n") == 0){
-            publicar(usuario_activo, arreglo_posts, usuarios);
+            publicar(usuario_activo, arreglo_posts,usuarios);
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
 
@@ -208,7 +206,6 @@ void esperar_orden(hash_t* usuarios){
     return;
 }
 
-
 hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
@@ -218,11 +215,11 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     //printf("    Debug: main.c 194\n");
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
-        hash_guardar(hash, usuario->nombre, usuario); // Antes estaba hash_guardar(hash, line, usuario); Pero para mi "line" iba a fallar, cuando se liberara o se sobreescribiera
+        hash_guardar(hash, usuario->nombre, usuario);
         id++;
         //printf("    Debug: main.c longitud: %lu  %s", longitud, line);
         longitud = getline(&line,&capacidad,archivo);
-    }//esto esta incompleto --- Que le falta? Creo que ahora ya está
+    }
     //impresora_hash(hash);
     free(line);
     return hash;
@@ -245,7 +242,7 @@ int main(int argc, char *argv[]){
     //printf("    Debug: main.c 218\n");
 
     esperar_orden(hash_usuarios);
-
+    
     hash_destruir(hash_usuarios);
     return 0;
 }
