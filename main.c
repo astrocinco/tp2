@@ -104,6 +104,15 @@ arreglo_posts_t* crear_arreglo(){
 }
 
 
+void destruir_arreglo(arreglo_posts_t* arreglo_st){
+    for (size_t i = 0; i < arreglo_st->cantidad; i++){
+        destruir_post(arreglo_st->arreglo[i]);
+    }
+    free(arreglo_st->arreglo);
+    free(arreglo_st);
+}
+
+
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = NULL;
@@ -142,8 +151,7 @@ void esperar_orden(hash_t* usuarios){
         }
     }
     free(ingreso);
-    free(arreglo_posts->arreglo);
-    free(arreglo_posts);
+    destruir_arreglo(arreglo_posts);
     return;
 }
 
@@ -193,7 +201,10 @@ void destruir_usuario(void* usuario_void){
 
 void destruir_post(void* post_void){
     post_t* post = (post_t*)post_void; // Para evitar warnings
-    // HACER
+
+    abb_destruir(post->likes);
+    free(post->contenido);
+    free(post);
 }
 
 
@@ -233,7 +244,7 @@ int main(int argc, char *argv[]){
     //printf("    Debug: main.c 218\n");
 
     esperar_orden(hash_usuarios);
-
+    
     hash_destruir(hash_usuarios);
     return 0;
 }
