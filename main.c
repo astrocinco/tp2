@@ -47,6 +47,34 @@
 #define TAM_MAX_INGRESO 150
 #define TAM_MAX_NOMBRE_USU 50
 
+
+typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+    char* nombre;
+    heap_t* feed; // posts_sin_ver
+    size_t id_txt;
+} usuario_t;
+
+
+typedef struct post{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+    size_t nro_id;
+    usuario_t* creador;
+    char* contenido;
+    abb_t* likes; 
+} post_t;
+
+
+typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
+    post_t** arreglo;
+    size_t cantidad;
+} arreglo_posts_t;
+
+
+typedef struct dupla{
+    size_t prioridad;
+    post_t* post;
+} dupla_t;
+
+
 //  DEBUGGERS - BORRAR PARA ENTREGAR
 void impresora_hash(hash_t* hash){
     hash_iter_t* iterador = hash_iter_crear(hash);
@@ -59,6 +87,16 @@ void impresora_hash(hash_t* hash){
     }
     printf("    Fin impresora hash\n");
 }
+
+
+//  DEBUGGERS - BORRAR PARA ENTREGAR
+void debugger_feeds(heap_t* feed){
+    while(!heap_esta_vacio(feed)){
+        dupla_t* elem = heap_desencolar(feed);
+        printf("    Func debugger: Contenido: %s\n", elem->post->contenido);
+    }
+}
+
 
 //  --- FUNCIONES
 
@@ -160,6 +198,8 @@ void esperar_orden(hash_t* usuarios){
         }else if(strcmp(ingreso, "likear_post\n") == 0){
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
+            printf("Estoy usando esto para debug\n");
+            debugger_feeds(usuario_activo->feed);
 
         }else if(strcmp(ingreso, "quit\n") == 0){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
