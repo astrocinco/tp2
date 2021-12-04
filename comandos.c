@@ -130,6 +130,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
         return;
     }
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
+    arreglo_posts->cantidad++;
 
     hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
     while(!hash_iter_al_final(iterador_usu)){
@@ -158,8 +159,24 @@ void ver_prox(usuario_t* usuario_activo){
 
 }
 
-void likear(){
 
+void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
+    char* que_id_likear = NULL;
+    size_t buffer;
+    getline(&que_id_likear, &buffer, stdin);
+    if (usuario_activo == NULL) {
+        printf("Error: Usuario no loggeado o Post inexistente\n"); // revisar, poner mensaje de error correcto ---------------------------
+        return;
+    }
+
+    size_t id = atoi(que_id_likear);
+    if (id >= arreglo->cantidad) {
+        printf("Error: Usuario no loggeado o Post inexistente\n"); // revisar, poner mensaje de error correcto ---------------------------
+        return;
+    }
+    post_t* post_a_likear = arreglo->arreglo[id];
+    abb_guardar(post_a_likear->likes, usuario_activo->nombre, usuario_activo);
+    printf("Post likeado\n");
 }
 
 

@@ -106,7 +106,6 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
     if (arreglo_st == NULL){
         return NULL;
     }
-
     arreglo_st->arreglo = malloc(sizeof(void*) * CAP_CANT_POSTS);
     arreglo_st->cantidad = 0;
     return arreglo_st;
@@ -196,15 +195,17 @@ void esperar_orden(hash_t* usuarios){
 
         }else if(strcmp(ingreso, "ver_siguiente_feed\n") == 0){
             ver_prox(usuario_activo);
+
         }else if(strcmp(ingreso, "likear_post\n") == 0){
+            likear(usuario_activo, arreglo_posts);
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
-            printf("Estoy usando esto para debug\n");
-            debugger_feeds(usuario_activo->feed);
+            //printf("Estoy usando esto para debug\n");
+            //debugger_feeds(usuario_activo->feed);
 
         }else if(strcmp(ingreso, "quit\n") == 0){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
-            printf("Quiting");
+            printf("Quiting\n");
             terminar = true;
         }else{
             printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");

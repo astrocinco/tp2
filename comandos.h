@@ -22,9 +22,9 @@ usuario_t* logout(usuario_t* usuario_activo);
 
 void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios);
 
-void ver_prox();
+void ver_prox(usuario_t* usuario_activo);
 
-void likear();
+void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo);
 
 void ver_likes();
 
