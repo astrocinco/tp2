@@ -62,10 +62,12 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     if (nuevo_post == NULL) return NULL;
 
     char* ingreso_copiado = malloc(sizeof(char*) * TAM_MAX_INGRESO);
+    char* nombre_usu_copiado = malloc(sizeof(char*) * TAM_MAX_INGRESO);
+    strcpy(ingreso_copiado, ingreso);
+    strcpy(nombre_usu_copiado, usuario_activo->nombre);
 
     nuevo_post->nro_id = arreglo_st->cantidad;
-    nuevo_post->creador = usuario_activo->nombre;
-    strcpy(ingreso_copiado, ingreso);
+    nuevo_post->creador = usuario_activo;
     nuevo_post->contenido = ingreso_copiado;
     nuevo_post->likes = abb_crear(strcmp, NULL);
 
@@ -149,10 +151,10 @@ void ver_prox(usuario_t* usuario_activo){
     if (heap_esta_vacio(usuario_activo->feed) || usuario_activo == NULL){
         printf("Usuario no loggeado o no hay mas posts para ver\n");
     }
-    post_t* post = heap_desencolar(usuario_activo->feed);
-    printf("Post ID %lu\n",post->nro_id);
-    printf("%s dijo: %s\n",post->creador->nombre,post->contenido);
-    printf("Likes: %lu\n", abb_cantidad(post->likes));
+    dupla_t* dupla = heap_desencolar(usuario_activo->feed);
+    printf("Post ID %lu\n", dupla->post->nro_id);
+    printf("%s dijo: %s\n", dupla->post->creador->nombre, dupla->post->contenido);
+    printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
 
 }
 

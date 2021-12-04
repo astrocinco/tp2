@@ -93,7 +93,7 @@ void impresora_hash(hash_t* hash){
 void debugger_feeds(heap_t* feed){
     while(!heap_esta_vacio(feed)){
         dupla_t* elem = heap_desencolar(feed);
-        printf("    Func debugger: Contenido: %s\n", elem->post->contenido);
+        printf("    Func debugger: ID: %lu - Publicador: %s Contenido: %s\n", elem->post->nro_id, elem->post->creador->nombre, elem->post->contenido);
     }
 }
 
@@ -111,6 +111,7 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
     arreglo_st->cantidad = 0;
     return arreglo_st;
 }
+
 
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
