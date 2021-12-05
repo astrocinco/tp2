@@ -146,13 +146,13 @@ int cmp_posts(const void* a, const void* b){
     size_t prioridad_1 = dupla1->prioridad;
     size_t prioridad_2 = dupla2->prioridad;
 
-    int dif_prioridad = prioridad_1 - prioridad_2;
+    int dif_prioridad = prioridad_2 - prioridad_1;
 
     // En caso de igual prioridad, el que fue publicado primero tiene prioridad
     if (dif_prioridad == 0){
         size_t orden_post_1 = dupla1->post->nro_id;
         size_t orden_post_2 = dupla2->post->nro_id;
-        dif_prioridad = orden_post_2 - orden_post_1;
+        dif_prioridad = orden_post_1 - orden_post_2;
     }
     return dif_prioridad;
 }
