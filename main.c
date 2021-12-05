@@ -82,7 +82,7 @@ void impresora_hash(hash_t* hash){
     while(!hash_iter_al_final(iterador)){
         const char* clave_actual = hash_iter_ver_actual(iterador);
         void* dato = hash_obtener(hash, clave_actual);
-        printf("    Nombre: %s     N°ID: %lu\n", clave_actual, ((usuario_t*)dato)->id_txt);
+        printf("         N°ID: %lu Nombre: %s", ((usuario_t*)dato)->id_txt, clave_actual);
         hash_iter_avanzar(iterador);
     }
     printf("    Fin impresora hash\n");
@@ -93,7 +93,7 @@ void impresora_hash(hash_t* hash){
 void debugger_feeds(heap_t* feed){
     while(!heap_esta_vacio(feed)){
         dupla_t* elem = heap_desencolar(feed);
-        printf("    Func debugger: ID: %lu - Publicador: %s Contenido: %s\n", elem->post->nro_id, elem->post->creador->nombre, elem->post->contenido);
+        printf("    Func debugger: ID: %lu - Contenido: %s Publicador: %s", elem->post->nro_id, elem->post->contenido, elem->post->creador->nombre);
     }
 }
 
@@ -252,10 +252,7 @@ int main(int argc, char *argv[]){
     //printf("    Debug: main.c 218\n");
 
     hash_iter_t* iter = hash_iter_crear(hash_usuarios);
-    while(!hash_iter_al_final(iter)){
-        printf("%s", hash_iter_ver_actual(iter));
-        hash_iter_avanzar(iter);
-    }
+    impresora_hash(hash_usuarios);
 
     esperar_orden(hash_usuarios);
     

@@ -151,10 +151,11 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
 void ver_prox(usuario_t* usuario_activo){
     if (heap_esta_vacio(usuario_activo->feed) || usuario_activo == NULL){
         printf("Usuario no loggeado o no hay mas posts para ver\n");
+        return;
     }
     dupla_t* dupla = heap_desencolar(usuario_activo->feed);
-    printf("Post ID %lu\n", dupla->post->nro_id);
-    printf("%s dijo: %s\n", dupla->post->creador->nombre, dupla->post->contenido);
+    printf("Post ID %lu - Prioridad: %lu", dupla->post->nro_id, dupla->prioridad);
+    printf("%s dijo: %s", dupla->post->creador->nombre, dupla->post->contenido);
     printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
 
 }
