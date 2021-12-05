@@ -26,7 +26,7 @@ void ver_prox(usuario_t* usuario_activo);
 
 void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo);
 
-void ver_likes();
+void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo);
 
 void debugger();
 

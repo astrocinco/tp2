@@ -41,21 +41,6 @@ typedef struct dupla{
 
 // AUXILIARES
 
-/*
-int cmp_alfa_usuarios(const char* nombre_liker_1, const char* nombre_liker_2){
-    int diferencia = 0;
-    int contador = 0;
-    while(diferencia == 0){
-        if (nombre_liker_1[contador] > nombre_liker_2[contador]){
-            return diferencia++;
-        }else if (nombre_liker_1[contador] < nombre_liker_2[contador]){
-            return diferencia--;
-        }else contador++;
-    }
-    printf("ERROR EN CMP DE ALFABETICO\n");
-    return NULL; // NO DEBERÍA LLEGAR ACÁ
-}
-*/
 
 post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
     post_t* nuevo_post = malloc(sizeof(post_t*));
@@ -67,12 +52,14 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     strcpy(nombre_usu_copiado, usuario_activo->nombre);
 
     nuevo_post->nro_id = arreglo_st->cantidad;
+    arreglo_st->arreglo[nuevo_post->nro_id] = nuevo_post;
     nuevo_post->creador = usuario_activo;
     nuevo_post->contenido = ingreso_copiado;
     nuevo_post->likes = abb_crear(strcmp, NULL);
 
     return nuevo_post;
 }
+
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
@@ -85,6 +72,13 @@ dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     nueva_dupla->post = post;
     return nueva_dupla;
 }
+
+
+bool func_imprimir_likes(const char* clave, void* dato, void* extra){
+    printf("    %s", clave);
+    return true;
+}
+
 
 // FUNCIONES PARA COMANDOS
 
@@ -100,7 +94,7 @@ usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
     }
     if (hash_pertenece(usuarios, ingreso_login)){
         usuario_activo = hash_obtener(usuarios, ingreso_login);
-        printf("Hola %s", ingreso_login); // Sin \n porque nos nombres de usuarios en hash ya tienen \n
+        printf("Hola %s", ingreso_login); 
     }else{
         printf("Error: usuario no existente\n");
     }
@@ -144,7 +138,6 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
             hash_iter_avanzar(iterador_usu);
         }
     }
-    printf("    Debug: Publicaste wey\n");
 }
 
 
@@ -154,10 +147,10 @@ void ver_prox(usuario_t* usuario_activo){
         return;
     }
     dupla_t* dupla = heap_desencolar(usuario_activo->feed);
-    printf("Post ID %lu - Prioridad: %lu", dupla->post->nro_id, dupla->prioridad);
-    printf("%s dijo: %s", dupla->post->creador->nombre, dupla->post->contenido);
+    printf("    Debug: Post ID %lu - Prioridad: %lu", dupla->post->nro_id, dupla->prioridad);
+    printf("dijo %s %s", dupla->post->creador->nombre, dupla->post->contenido);
     printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
-
+    // TERMINAR. ARREGLAR QUE SE PONEN \N DE MÁS
 }
 
 
@@ -166,23 +159,36 @@ void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     size_t buffer;
     getline(&que_id_likear, &buffer, stdin);
     if (usuario_activo == NULL) {
-        printf("Error: Usuario no loggeado o Post inexistente\n"); // revisar, poner mensaje de error correcto ---------------------------
+        printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
     }
-
     size_t id = atoi(que_id_likear);
     if (id >= arreglo->cantidad) {
-        printf("Error: Usuario no loggeado o Post inexistente\n"); // revisar, poner mensaje de error correcto ---------------------------
+        printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
     }
     post_t* post_a_likear = arreglo->arreglo[id];
-    abb_guardar(post_a_likear->likes, usuario_activo->nombre, usuario_activo);
+    abb_guardar(post_a_likear->likes, usuario_activo->nombre, NULL);
     printf("Post likeado\n");
 }
 
 
-void ver_likes(){
-
+void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
+    char* que_id_mostrar = NULL;
+    size_t buffer;
+    getline(&que_id_mostrar, &buffer, stdin);
+    if (usuario_activo == NULL) {
+        printf("Error: Usuario no loggeado o Post inexistente\n"); 
+        return;
+    }
+    size_t id = atoi(que_id_mostrar);
+    if (id >= arreglo->cantidad) {
+        printf("Error: Usuario no loggeado o Post inexistente\n"); 
+        return;
+    }
+    post_t* post_a_ver = arreglo->arreglo[id];
+    printf("El post tiene %lu likes:\n", abb_cantidad(post_a_ver->likes));
+    abb_in_order(post_a_ver->likes, func_imprimir_likes, NULL);
 }
 
 

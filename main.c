@@ -200,8 +200,7 @@ void esperar_orden(hash_t* usuarios){
             likear(usuario_activo, arreglo_posts);
 
         }else if(strcmp(ingreso, "mostrar_likes\n") == 0){
-            //printf("Estoy usando esto para debug\n");
-            //debugger_feeds(usuario_activo->feed);
+            ver_likes(usuario_activo, arreglo_posts);
 
         }else if(strcmp(ingreso, "quit\n") == 0){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
@@ -222,22 +221,18 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     size_t capacidad;
     ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
     size_t id = 0;
-    //printf("    Debug: main.c 194\n");
     while(longitud > 0){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, usuario->nombre, usuario);
         id++;
-        //printf("    Debug: main.c longitud: %lu  %s", longitud, line);
         longitud = getline(&line,&capacidad,archivo);
     }
-    //impresora_hash(hash);
     free(line);
     return hash;
 }
 
 
 int main(int argc, char *argv[]){
-    //printf("    Debug: Comienza el programa\n");
     if (argc != NRO_ARGUMENTOS_INGRESO_TXT) {
         printf("ERROR: el número de argumentos ingresados es erroneo.\n"); 
         return -1;
@@ -249,10 +244,9 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-    //printf("    Debug: main.c 218\n");
 
     hash_iter_t* iter = hash_iter_crear(hash_usuarios);
-    impresora_hash(hash_usuarios);
+    // impresora_hash(hash_usuarios); // FUNCION DEBUG. BORRAR LUEGO
 
     esperar_orden(hash_usuarios);
     
