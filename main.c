@@ -152,7 +152,7 @@ int cmp_posts(const void* a, const void* b){
     if (dif_prioridad == 0){
         size_t orden_post_1 = dupla1->post->nro_id;
         size_t orden_post_2 = dupla2->post->nro_id;
-        dif_prioridad = orden_post_1 - orden_post_2;
+        dif_prioridad = orden_post_2 - orden_post_1;
     }
     return dif_prioridad;
 }
