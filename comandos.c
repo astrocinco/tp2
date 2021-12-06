@@ -17,11 +17,11 @@
 
 
 post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
-    post_t* nuevo_post = malloc(sizeof(post_t*));
+    post_t* nuevo_post = malloc(sizeof(post_t));
     if (nuevo_post == NULL) return NULL;
 
-    char* ingreso_copiado = malloc(sizeof(char*) * TAM_MAX_INGRESO);
-    char* nombre_usu_copiado = malloc(sizeof(char*) * TAM_MAX_INGRESO);
+    char* ingreso_copiado = malloc(sizeof(char) * TAM_MAX_INGRESO);
+    char* nombre_usu_copiado = malloc(sizeof(char) * TAM_MAX_INGRESO);
     strcpy(ingreso_copiado, ingreso);
     strcpy(nombre_usu_copiado, usuario_activo->nombre);
 
@@ -112,6 +112,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
             hash_iter_avanzar(iterador_usu);
         }
     }
+    hash_iter_destruir(iterador_usu);
 }
 
 

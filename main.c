@@ -86,7 +86,7 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS R
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; 
     free(usuario->nombre);
-    heap_destruir(usuario->feed, NULL); 
+    heap_destruir(usuario->feed, free); 
     free(usuario);
 }
 
