@@ -59,8 +59,10 @@ bool func_imprimir_likes(const char* clave, void* dato, void* extra){
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
     char* ingreso_login = NULL;
-    size_t buffer;
-    getline(&ingreso_login, &buffer, stdin);
+    size_t buffer = 0;
+    if(getline(&ingreso_login, &buffer, stdin) == EOF){
+        return NULL;
+    }
     
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
@@ -91,7 +93,9 @@ usuario_t* logout(usuario_t* usuario_activo){
 void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
     char* ingreso_publicar = NULL;
     size_t buffer;
-    getline(&ingreso_publicar, &buffer, stdin);
+    if(getline(&ingreso_publicar, &buffer, stdin) == EOF){
+        return;
+    }
 
     if (usuario_activo == NULL){
         printf("Error: no habia usuario loggeado\n" );
@@ -145,8 +149,10 @@ void ver_prox(usuario_t* usuario_activo){
 void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     char* que_id_likear = NULL;
     size_t buffer;
-    int largo = getline(&que_id_likear, &buffer, stdin);
-    
+    if(getline(&que_id_likear, &buffer, stdin) == EOF){
+        return;
+    }
+
     if (usuario_activo == NULL) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
@@ -165,7 +171,9 @@ void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
 void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     char* que_id_mostrar = NULL;
     size_t buffer;
-    getline(&que_id_mostrar, &buffer, stdin);
+    if(getline(&que_id_mostrar, &buffer, stdin) == EOF){
+        return;
+    }
     if (usuario_activo == NULL) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
