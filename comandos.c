@@ -10,33 +10,7 @@
 #include "abb.h"
 #include "lista.h"
 #include "comandos.h"
-
-
-typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    char* nombre;
-    heap_t* feed; // posts_sin_ver
-    size_t id_txt;
-} usuario_t;
-
-
-typedef struct post{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    size_t nro_id;
-    usuario_t* creador;
-    char* contenido;
-    abb_t* likes; 
-} post_t;
-
-
-typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    post_t** arreglo;
-    size_t cantidad;
-} arreglo_posts_t;
-
-
-typedef struct dupla{
-    size_t prioridad;
-    post_t* post;
-} dupla_t;
+#include "structs.h"
 
 
 // AUXILIARES

@@ -11,11 +11,6 @@
 #include "abb.h"
 #include "lista.h"
 
-typedef struct usuario usuario_t;
-typedef struct arreglo_posts arreglo_posts_t;
-typedef struct post post_t;
-typedef struct dupla dupla_t;
-
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 
 usuario_t* logout(usuario_t* usuario_activo);

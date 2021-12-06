@@ -41,38 +41,12 @@
 #include "abb.h"
 #include "lista.h"
 #include "comandos.h"
+#include "structs.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define CAP_CANT_POSTS 50ul
 #define TAM_MAX_INGRESO 150
 #define TAM_MAX_NOMBRE_USU 50
-
-
-typedef struct usuario{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    char* nombre;
-    heap_t* feed; // posts_sin_ver
-    size_t id_txt;
-} usuario_t;
-
-
-typedef struct post{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    size_t nro_id;
-    usuario_t* creador;
-    char* contenido;
-    abb_t* likes; 
-} post_t;
-
-
-typedef struct arreglo_posts{ // REVISAR CÓMO HACER PARA NO TENER QUE DECLARARLOS DOS VECES
-    post_t** arreglo;
-    size_t cantidad;
-} arreglo_posts_t;
-
-
-typedef struct dupla{
-    size_t prioridad;
-    post_t* post;
-} dupla_t;
 
 
 //  DEBUGGERS - BORRAR PARA ENTREGAR
@@ -113,7 +87,7 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
 
 
 void destruir_usuario(void* usuario_void){
-    usuario_t* usuario = (usuario_t*)usuario_void; // Para evitar warnings
+    usuario_t* usuario = (usuario_t*)usuario_void; 
     free(usuario->nombre);
     heap_destruir(usuario->feed, NULL); 
     // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
@@ -123,7 +97,7 @@ void destruir_usuario(void* usuario_void){
 
 
 void destruir_post(void* post_void){
-    post_t* post = (post_t*)post_void; // Para evitar warnings
+    post_t* post = (post_t*)post_void;
 
     abb_destruir(post->likes);
     free(post->contenido);
