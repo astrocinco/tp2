@@ -61,11 +61,13 @@ usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
     char* ingreso_login = NULL;
     size_t buffer = 0;
     if(getline(&ingreso_login, &buffer, stdin) == EOF){
+        free(ingreso_login);
         return NULL;
     }
     
     if (usuario_activo != NULL){
         printf("Error: Ya habia un usuario loggeado\n" );
+        free(ingreso_login);
         return usuario_activo;
     }
     if (hash_pertenece(usuarios, ingreso_login)){
@@ -92,13 +94,14 @@ usuario_t* logout(usuario_t* usuario_activo){
 
 void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
     char* ingreso_publicar = NULL;
-    size_t buffer;
+    size_t buffer = 0;
     if(getline(&ingreso_publicar, &buffer, stdin) == EOF){
         return;
     }
 
     if (usuario_activo == NULL){
         printf("Error: no habia usuario loggeado\n" );
+        free(ingreso_publicar);
         return;
     }
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
@@ -116,6 +119,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
             hash_iter_avanzar(iterador_usu);
         }
     }
+    printf("Post publicado\n");
     hash_iter_destruir(iterador_usu);
     free(ingreso_publicar);
 }
@@ -133,7 +137,7 @@ void imprimir_sin_barra_n(char* cadena){
 
 
 void ver_prox(usuario_t* usuario_activo){
-    if (heap_esta_vacio(usuario_activo->feed) || usuario_activo == NULL){
+    if (usuario_activo == NULL || heap_esta_vacio(usuario_activo->feed)){
         printf("Usuario no loggeado o no hay mas posts para ver\n");
         return;
     }
@@ -162,6 +166,7 @@ void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
     }
+    free(que_id_likear);
     post_t* post_a_likear = arreglo->arreglo[id];
     abb_guardar(post_a_likear->likes, usuario_activo->nombre, NULL);
     printf("Post likeado\n");
@@ -183,6 +188,7 @@ void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
     }
+    free(que_id_mostrar);
     post_t* post_a_ver = arreglo->arreglo[id];
     printf("El post tiene %lu likes:\n", abb_cantidad(post_a_ver->likes));
     abb_in_order(post_a_ver->likes, func_imprimir_likes, NULL);

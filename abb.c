@@ -20,7 +20,7 @@ struct abb{
 	size_t cantidad;
 };
 
-typedef struct abb_iter{
+struct abb_iter{
 	const abb_t *arbol;
 	pila_t *pila_iter;
 };

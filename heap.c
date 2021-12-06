@@ -24,7 +24,7 @@ bool aux_swap_generico(void *x, void *y){
 
 
 // STRUCTS
-typedef struct heap{
+struct heap{
     void **datos;
     size_t cant;
     size_t tam;
