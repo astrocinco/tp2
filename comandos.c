@@ -94,7 +94,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
     getline(&ingreso_publicar, &buffer, stdin);
 
     if (usuario_activo == NULL){
-        printf("Error: no habia usuario loggeado.\n" );
+        printf("Error: no habia usuario loggeado\n" );
         return;
     }
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
