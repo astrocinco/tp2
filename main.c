@@ -147,14 +147,16 @@ usuario_t* crear_usuario(char* nombre, size_t id){
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = NULL;
-	size_t tam_buffer; 
+	size_t tam_buffer = 0; 
 
     usuario_t* usuario_activo = NULL;
     arreglo_posts_t* arreglo_posts = crear_arreglo();
     
     while(!terminar){
         //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
-        getline(&ingreso, &tam_buffer, stdin);
+        if(getline(&ingreso, &tam_buffer, stdin) == EOF){
+            break;
+        }
 
         if (strcmp(ingreso, "login\n") == 0){
             usuario_activo = login(usuarios, usuario_activo);

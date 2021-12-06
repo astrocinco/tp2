@@ -145,7 +145,8 @@ void ver_prox(usuario_t* usuario_activo){
 void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     char* que_id_likear = NULL;
     size_t buffer;
-    getline(&que_id_likear, &buffer, stdin);
+    int largo = getline(&que_id_likear, &buffer, stdin);
+    
     if (usuario_activo == NULL) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         return;
