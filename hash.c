@@ -13,20 +13,20 @@
 
 
 // Estructuras
-struct hash{
+typedef struct hash{
     void** arreglo;
     size_t capacidad;
     size_t carga;
     hash_destruir_dato_t funcion_destruir_dato;
-};
+} hash_t;
 
 
-struct hash_iter{
+typedef struct hash_iter{
     const hash_t* hash;
     int nro_elemento;
     size_t pos_en_arreglo;
     lista_iter_t* iterador_lista_actual;
-};
+} hash_iter_t;
 
 
 typedef struct campo{

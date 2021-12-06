@@ -46,7 +46,6 @@
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define CAP_CANT_POSTS 50ul
 #define TAM_MAX_INGRESO 150
-#define TAM_MAX_NOMBRE_USU 50
 
 
 //  DEBUGGERS - BORRAR PARA ENTREGAR
@@ -85,7 +84,6 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS R
 
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; 
-    //printf("Freeing %s", usuario->nombre);
     free(usuario->nombre);
     heap_destruir(usuario->feed, free); 
     free(usuario);
@@ -134,7 +132,7 @@ usuario_t* crear_usuario(char* nombre, size_t id){
     usuario_t* usuario = malloc(sizeof(usuario_t));
     if (!usuario) return NULL;
 
-    usuario->nombre = malloc(sizeof(char) * TAM_MAX_NOMBRE_USU);
+    usuario->nombre = malloc(sizeof(char) * TAM_MAX_INGRESO);
     if (usuario->nombre == NULL) return NULL;
 
     strcpy(usuario->nombre, nombre); 
@@ -218,7 +216,7 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-
+    impresora_hash(hash_usuarios); // DEBUG
     esperar_orden(hash_usuarios);
     
     hash_destruir(hash_usuarios);

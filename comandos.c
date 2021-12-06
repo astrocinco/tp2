@@ -58,7 +58,7 @@ bool func_imprimir_likes(const char* clave, void* dato, void* extra){
 
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
-    char* ingreso_login = NULL;
+    char* ingreso_login = malloc(10000);//NULL;
     size_t buffer = 0;
     if(getline(&ingreso_login, &buffer, stdin) == EOF){
         free(ingreso_login);
@@ -93,7 +93,7 @@ usuario_t* logout(usuario_t* usuario_activo){
 
 
 void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
-    char* ingreso_publicar = NULL;
+    char* ingreso_publicar = malloc(10000);//NULL;
     size_t buffer = 0;
     if(getline(&ingreso_publicar, &buffer, stdin) == EOF){
         return;
