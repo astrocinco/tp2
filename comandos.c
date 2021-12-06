@@ -82,7 +82,7 @@ usuario_t* logout(usuario_t* usuario_activo){
         usuario_activo = NULL;
         printf("Adios\n");
     }else{
-        printf("Error: no habia usuario loggeado.\n");
+        printf("Error: no habia usuario loggeado\n");
     }
     return usuario_activo;
 }
