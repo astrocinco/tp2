@@ -21,9 +21,8 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     if (nuevo_post == NULL) return NULL;
 
     char* ingreso_copiado = malloc(sizeof(char) * TAM_MAX_INGRESO);
-    char* nombre_usu_copiado = malloc(sizeof(char) * TAM_MAX_INGRESO);
+    if (ingreso_copiado == NULL) return NULL;
     strcpy(ingreso_copiado, ingreso);
-    strcpy(nombre_usu_copiado, usuario_activo->nombre);
 
     nuevo_post->nro_id = arreglo_st->cantidad;
     arreglo_st->arreglo[nuevo_post->nro_id] = nuevo_post;
@@ -36,6 +35,7 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
 
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
+    //printf("Creando publicador %s receptor %s", publicador->nombre, receptor->nombre);
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
     if (nueva_dupla == NULL) return NULL;
 
@@ -113,6 +113,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
         }
     }
     hash_iter_destruir(iterador_usu);
+    free(ingreso_publicar);
 }
 
 
@@ -137,6 +138,7 @@ void ver_prox(usuario_t* usuario_activo){
     imprimir_sin_barra_n(dupla->post->creador->nombre);
     printf(" dijo: %s", dupla->post->contenido);
     printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
+    free(dupla);
 }
 
 

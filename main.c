@@ -85,6 +85,7 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS R
 
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; 
+    //printf("Freeing %s", usuario->nombre);
     free(usuario->nombre);
     heap_destruir(usuario->feed, free); 
     free(usuario);
@@ -175,7 +176,6 @@ void esperar_orden(hash_t* usuarios){
 
         }else if(strcmp(ingreso, "quit\n") == 0){
         // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
-            printf("Quiting\n");
             terminar = true;
         }else{
             printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
