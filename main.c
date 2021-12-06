@@ -61,9 +61,6 @@ void impresora_hash(hash_t* hash){
     }
     printf("    Fin impresora hash\n");
 }
-
-
-//  DEBUGGERS - BORRAR PARA ENTREGAR
 void debugger_feeds(heap_t* feed){
     while(!heap_esta_vacio(feed)){
         dupla_t* elem = heap_desencolar(feed);
@@ -219,8 +216,6 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-
-    hash_iter_t* iter = hash_iter_crear(hash_usuarios);
 
     esperar_orden(hash_usuarios);
     

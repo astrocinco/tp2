@@ -10,6 +10,7 @@
 #include "hash.h"
 #include "abb.h"
 #include "lista.h"
+#include "structs.h"
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 

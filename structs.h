@@ -1,6 +1,7 @@
 #ifndef _STRUCTS_H_
 #define _STRUCTS_H_
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -36,5 +37,6 @@ typedef struct dupla{
     size_t prioridad;
     post_t* post;
 } dupla_t;
+
 
 #endif //_STRUCTS_H_

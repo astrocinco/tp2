@@ -115,16 +115,27 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
 }
 
 
+void imprimir_sin_barra_n(char* cadena){
+    int numero = 0;
+    char caracter = cadena[numero];
+    while (caracter != '\n'){
+        printf("%c", caracter);
+        numero++;
+        caracter = cadena[numero];
+    }
+}
+
+
 void ver_prox(usuario_t* usuario_activo){
     if (heap_esta_vacio(usuario_activo->feed) || usuario_activo == NULL){
         printf("Usuario no loggeado o no hay mas posts para ver\n");
         return;
     }
     dupla_t* dupla = heap_desencolar(usuario_activo->feed);
-    printf("    Debug: Post ID %lu - Prioridad: %lu", dupla->post->nro_id, dupla->prioridad);
-    printf("dijo %s %s", dupla->post->creador->nombre, dupla->post->contenido);
+    printf("Post ID %lu\n", dupla->post->nro_id);
+    imprimir_sin_barra_n(dupla->post->creador->nombre);
+    printf(" dijo: %s", dupla->post->contenido);
     printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
-    // TERMINAR. ARREGLAR QUE SE PONEN \N DE MÁS
 }
 
 
