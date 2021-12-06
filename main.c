@@ -104,6 +104,7 @@ void destruir_post(void* post_void){
     free(post);
 }
 
+
 void destruir_arreglo(arreglo_posts_t* arreglo_st){
     for (size_t i = 0; i < arreglo_st->cantidad; i++){
         destruir_post(arreglo_st->arreglo[i]);
@@ -111,6 +112,7 @@ void destruir_arreglo(arreglo_posts_t* arreglo_st){
     free(arreglo_st->arreglo);
     free(arreglo_st);
 }
+
 
 int cmp_posts(const void* a, const void* b){
     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
@@ -145,6 +147,7 @@ usuario_t* crear_usuario(char* nombre, size_t id){
     return usuario;
 }
 
+
 void esperar_orden(hash_t* usuarios){
     bool terminar = false;
 	char* ingreso = NULL;
@@ -153,7 +156,6 @@ void esperar_orden(hash_t* usuarios){
     usuario_t* usuario_activo = NULL;
     arreglo_posts_t* arreglo_posts = crear_arreglo();
     
-
     while(!terminar){
         //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
         getline(&ingreso, &tam_buffer, stdin);
@@ -220,7 +222,6 @@ int main(int argc, char *argv[]){
     fclose(archivo);
 
     hash_iter_t* iter = hash_iter_crear(hash_usuarios);
-    // impresora_hash(hash_usuarios); // FUNCION DEBUG. BORRAR LUEGO
 
     esperar_orden(hash_usuarios);
     
