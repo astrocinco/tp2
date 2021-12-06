@@ -29,7 +29,7 @@ typedef struct heap{
     size_t cant;
     size_t tam;
     cmp_func_t cmp;
-} heap_t;
+};
 
 
 // PRIMITIVAS HEAP

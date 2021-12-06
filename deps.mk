@@ -1,0 +1,1 @@
+algogram: tp2.o hash.o abb.o lista.o heap.o comandos.o pila.o

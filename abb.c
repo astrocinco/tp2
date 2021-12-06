@@ -23,7 +23,7 @@ struct abb{
 typedef struct abb_iter{
 	const abb_t *arbol;
 	pila_t *pila_iter;
-} abb_iter_t;
+};
 
 
 nodo_t *nodo_crear(const char *clave, void *dato){
