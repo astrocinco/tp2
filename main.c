@@ -75,7 +75,7 @@ void debugger_feeds(heap_t* feed){
 //  --- FUNCIONES
 
 
-arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector??
+arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS RAZON
     arreglo_posts_t* arreglo_st = malloc(sizeof(arreglo_posts_t));
     if (arreglo_st == NULL){
         return NULL;
@@ -90,8 +90,6 @@ void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void; 
     free(usuario->nombre);
     heap_destruir(usuario->feed, NULL); 
-    // CREO QUE DEBERÍA LLAMAR A DESTRUIR_POST o NULL. REVISAR --- AUNQUE TAL VEZ LOS HEAPS NO SE ...
-    // ... DEBERIAN ENCARGAR DE DESTRUIR LOS POSTS, SINO EL ARREGLO DE POSTS DEBERÍA DESTRUIRLOS. SI LO DELEGAS A CADA HEAP, TENDRÁS INVALID FREES
     free(usuario);
 }
 
@@ -190,6 +188,7 @@ void esperar_orden(hash_t* usuarios){
     destruir_arreglo(arreglo_posts);
     return;
 }
+
 
 hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
