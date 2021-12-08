@@ -25,7 +25,9 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     strcpy(ingreso_copiado, ingreso);
 
     nuevo_post->nro_id = arreglo_st->cantidad;
+
     arreglo_st->arreglo[nuevo_post->nro_id] = nuevo_post;
+    
     nuevo_post->creador = usuario_activo;
     nuevo_post->contenido = ingreso_copiado;
     nuevo_post->likes = abb_crear(strcmp, NULL);
