@@ -8,6 +8,7 @@
             STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)   -- HECHO
         HACER CMP PARA HEAP                                          -- HECHO
     
+        LIMPIAR EL HASH!!!!!!!!!!!!
 
  -- FUNCIONES QUE DEBE TENER --
         LOGIN                           -- HECHO

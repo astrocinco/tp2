@@ -49,7 +49,7 @@ dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
 
 
 bool func_imprimir_likes(const char* clave, void* dato, void* extra){
-    printf("    %s", clave);
+    printf("\t%s", clave);
     return true;
 }
 
@@ -110,6 +110,7 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
     hash_iter_t* iter = hash_iter_crear(usuarios);
     while(!hash_iter_al_final(iter)){
         const char* user_name = hash_iter_ver_actual(iter);
+        //printf("%s\n", user_name);
         usuario_t* usuario = hash_obtener(usuarios,user_name);
 
         if(usuario != usuario_activo){
@@ -151,18 +152,20 @@ void ver_prox(usuario_t* usuario_activo){
 
 void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     char* que_id_likear = NULL;
-    size_t buffer;
+    size_t buffer = 0;
     if(getline(&que_id_likear, &buffer, stdin) == EOF){
         return;
     }
 
     if (usuario_activo == NULL) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
+        free(que_id_likear);
         return;
     }
     size_t id = atoi(que_id_likear);
     if (id >= arreglo->cantidad) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
+        free(que_id_likear);
         return;
     }
     free(que_id_likear);
@@ -178,17 +181,17 @@ void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     if(getline(&que_id_mostrar, &buffer, stdin) == EOF){
         return;
     }
-    if (usuario_activo == NULL) {
-        printf("Error: Usuario no loggeado o Post inexistente\n"); 
-        return;
-    }
     size_t id = atoi(que_id_mostrar);
-    if (id >= arreglo->cantidad) {
-        printf("Error: Usuario no loggeado o Post inexistente\n"); 
-        return;
-    }
     free(que_id_mostrar);
     post_t* post_a_ver = arreglo->arreglo[id];
+
+    if (id >= arreglo->cantidad || abb_cantidad(post_a_ver->likes) == 0) {
+        printf("Error: Post inexistente o sin likes\n"); 
+        return;
+    }
+
+
+
     printf("El post tiene %lu likes:\n", abb_cantidad(post_a_ver->likes));
     abb_in_order(post_a_ver->likes, func_imprimir_likes, NULL);
 }

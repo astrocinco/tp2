@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "lista.h"
 #include "hash.h"
-#define CAP_INICIAL 50ul
+#define CAP_INICIAL 51ul
 #define FACTOR_NVA_CAP 2ul
 #define FACTOR_CARGA_MAX 2.5
 #define FACTOR_CARGA_MIN 0.2
@@ -302,6 +302,10 @@ bool hash_iter_avanzar(hash_iter_t* iter){
 
     if (lista_iter_al_final(iter->iterador_lista_actual)){
         iter->pos_en_arreglo++;
+        //printf("puntero a lista %p\n",iter->hash->arreglo[iter->pos_en_arreglo]);
+        if (iter->hash->arreglo[iter->pos_en_arreglo] == NULL){
+            return false;
+        }
 
         while(lista_esta_vacia(iter->hash->arreglo[iter->pos_en_arreglo])){
             iter->pos_en_arreglo++;
@@ -312,11 +316,9 @@ bool hash_iter_avanzar(hash_iter_t* iter){
         }
         lista_iter_destruir(iter->iterador_lista_actual);
 
-        if (iter->pos_en_arreglo != -1){
-            
-            iter->iterador_lista_actual = lista_iter_crear(iter->hash->arreglo[iter->pos_en_arreglo]);
 
-        }
+        iter->iterador_lista_actual = lista_iter_crear(iter->hash->arreglo[iter->pos_en_arreglo]);
+
     }
     return true;
 }
