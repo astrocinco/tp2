@@ -83,9 +83,9 @@ arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS R
 
 
 void destruir_usuario(void* usuario_void){
-    usuario_t* usuario = (usuario_t*)usuario_void; 
+    usuario_t* usuario = (usuario_t*)usuario_void;
     free(usuario->nombre);
-    heap_destruir(usuario->feed, free); 
+    heap_destruir(usuario->feed, free);
     free(usuario);
 }
 
@@ -190,12 +190,17 @@ void esperar_orden(hash_t* usuarios){
 hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
-    size_t capacidad;
-    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
+    size_t capacidad = 0;
     size_t id = 0;
-    while(longitud > 0){ 
+    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
+
+    while(longitud != EOF){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, usuario->nombre, usuario);
+
+        //usuario_t* user = hash_obtener(hash,usuario->nombre);
+
+        //printf("%s\n", user->nombre);
         id++;
         longitud = getline(&line,&capacidad,archivo);
     }
@@ -216,7 +221,7 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-    impresora_hash(hash_usuarios); // DEBUG
+    //impresora_hash(hash_usuarios); // DEBUG
     esperar_orden(hash_usuarios);
     
     hash_destruir(hash_usuarios);

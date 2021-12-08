@@ -58,7 +58,7 @@ bool func_imprimir_likes(const char* clave, void* dato, void* extra){
 
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo){
-    char* ingreso_login = malloc(10000);//NULL;
+    char* ingreso_login = NULL;
     size_t buffer = 0;
     if(getline(&ingreso_login, &buffer, stdin) == EOF){
         free(ingreso_login);
@@ -93,34 +93,33 @@ usuario_t* logout(usuario_t* usuario_activo){
 
 
 void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
-    char* ingreso_publicar = malloc(10000);//NULL;
+    char* ingreso_publicar = NULL;
     size_t buffer = 0;
     if(getline(&ingreso_publicar, &buffer, stdin) == EOF){
         return;
     }
-
     if (usuario_activo == NULL){
         printf("Error: no habia usuario loggeado\n" );
         free(ingreso_publicar);
         return;
     }
+    
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
     arreglo_posts->cantidad++;
 
-    hash_iter_t* iterador_usu = hash_iter_crear(usuarios);
-    while(!hash_iter_al_final(iterador_usu)){
-        const char* nombre_usu = hash_iter_ver_actual(iterador_usu);
-        usuario_t* usuario_poner_feed = hash_obtener(usuarios, nombre_usu);
-        if (usuario_poner_feed != usuario_activo){
-            dupla_t* dupla = crear_dupla(usuario_activo, usuario_poner_feed, nuevo_post);
-            heap_encolar(usuario_poner_feed->feed, dupla);
-            hash_iter_avanzar(iterador_usu);
-        }else{
-            hash_iter_avanzar(iterador_usu);
+    hash_iter_t* iter = hash_iter_crear(usuarios);
+    while(!hash_iter_al_final(iter)){
+        const char* user_name = hash_iter_ver_actual(iter);
+        usuario_t* usuario = hash_obtener(usuarios,user_name);
+
+        if(usuario != usuario_activo){
+            dupla_t* dupla = crear_dupla(usuario_activo, usuario, nuevo_post);
+            heap_encolar(usuario->feed,dupla);
         }
+        hash_iter_avanzar(iter);
     }
     printf("Post publicado\n");
-    hash_iter_destruir(iterador_usu);
+    hash_iter_destruir(iter);
     free(ingreso_publicar);
 }
 

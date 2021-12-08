@@ -257,6 +257,7 @@ bool hash_guardar(hash_t* hash, const char* clave, void* dato){
         }
     }
     size_t posicion = FUN_HASHING(clave) % hash->capacidad;
+    //printf("%zu = %s\n", posicion,clave);
     campo_t* campo_agregado = campo_crear(clave, dato);
     lista_insertar_ultimo(hash->arreglo[posicion], campo_agregado);
     hash->carga++;
@@ -298,8 +299,10 @@ bool hash_iter_avanzar(hash_iter_t* iter){
         return false;
     }
     lista_iter_avanzar(iter->iterador_lista_actual);
+
     if (lista_iter_al_final(iter->iterador_lista_actual)){
         iter->pos_en_arreglo++;
+
         while(lista_esta_vacia(iter->hash->arreglo[iter->pos_en_arreglo])){
             iter->pos_en_arreglo++;
             if (iter->pos_en_arreglo == iter->hash->capacidad){
@@ -308,7 +311,12 @@ bool hash_iter_avanzar(hash_iter_t* iter){
             }
         }
         lista_iter_destruir(iter->iterador_lista_actual);
-        iter->iterador_lista_actual = lista_iter_crear(iter->hash->arreglo[iter->pos_en_arreglo]);
+
+        if (iter->pos_en_arreglo != -1){
+            
+            iter->iterador_lista_actual = lista_iter_crear(iter->hash->arreglo[iter->pos_en_arreglo]);
+
+        }
     }
     return true;
 }
