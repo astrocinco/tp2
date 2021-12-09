@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#define TAM_MAX_INGRESO 15000
+#define TAM_MAX_INGRESO 30000
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
