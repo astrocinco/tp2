@@ -11,6 +11,7 @@
 #include "hash.h"
 #include "abb.h"
 #include "lista.h"
+#include "vectorr.h"
 
 typedef struct usuario{ 
     char* nombre;
@@ -26,12 +27,12 @@ typedef struct post{
     abb_t* likes; 
 } post_t;
 
-
+/*
 typedef struct arreglo_posts{ 
     post_t** arreglo;
     size_t cantidad;
 } arreglo_posts_t;
-
+*/
 
 typedef struct dupla{
     size_t prioridad;

@@ -11,18 +11,19 @@
 #include "abb.h"
 #include "lista.h"
 #include "structs.h"
+#include "vectorr.h"
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 
 usuario_t* logout(usuario_t* usuario_activo);
 
-void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios);
+void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuarios);
 
 void ver_prox(usuario_t* usuario_activo);
 
-void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo);
+void likear(usuario_t* usuario_activo, vector_t* arreglo);
 
-void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo);
+void ver_likes(usuario_t* usuario_activo, vector_t* arreglo);
 
 void debugger();
 

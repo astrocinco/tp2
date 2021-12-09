@@ -72,17 +72,6 @@ void debugger_feeds(heap_t* feed){
 //  --- FUNCIONES
 
 
-arreglo_posts_t* crear_arreglo(){//y si usamos el tda vector?? CREO QUE TENÉS RAZON
-    arreglo_posts_t* arreglo_st = malloc(sizeof(arreglo_posts_t));
-    if (arreglo_st == NULL){
-        return NULL;
-    }
-    arreglo_st->arreglo = malloc(sizeof(void*) * CAP_CANT_POSTS);
-    arreglo_st->cantidad = 0;
-    return arreglo_st;
-}
-
-
 void destruir_usuario(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void;
     free(usuario->nombre);
@@ -98,16 +87,6 @@ void destruir_post(void* post_void){
     free(post->contenido);
     free(post);
 }
-
-
-void destruir_arreglo(arreglo_posts_t* arreglo_st){
-    for (size_t i = 0; i < arreglo_st->cantidad; i++){
-        destruir_post(arreglo_st->arreglo[i]);
-    }
-    free(arreglo_st->arreglo);
-    free(arreglo_st);
-}
-
 
 int cmp_posts(const void* a, const void* b){
     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
@@ -149,7 +128,7 @@ void esperar_orden(hash_t* usuarios){
 	size_t tam_buffer = 0; 
 
     usuario_t* usuario_activo = NULL;
-    arreglo_posts_t* arreglo_posts = crear_arreglo();
+    vector_t* arreglo_posts = vector_crear();
     
     while(!terminar){
         //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
@@ -183,7 +162,7 @@ void esperar_orden(hash_t* usuarios){
         }
     }
     free(ingreso);
-    destruir_arreglo(arreglo_posts);
+    vector_destruir(arreglo_posts,destruir_post);
     return;
 }
 

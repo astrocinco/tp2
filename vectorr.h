@@ -16,4 +16,6 @@ void* vector_obtener();
 
 size_t vector_cantidad();
 
-#endif _VECTORR_
+void vector_destruir();
+
+#endif //_VECTORR_

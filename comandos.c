@@ -11,12 +11,12 @@
 #include "lista.h"
 #include "comandos.h"
 #include "structs.h"
-
+#include "vectorr.h"
 
 // AUXILIARES
 
 
-post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
+post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
     post_t* nuevo_post = malloc(sizeof(post_t));
     if (nuevo_post == NULL) return NULL;
 
@@ -24,10 +24,10 @@ post_t* crear_post(arreglo_posts_t* arreglo_st, usuario_t* usuario_activo, char*
     if (ingreso_copiado == NULL) return NULL;
     strcpy(ingreso_copiado, ingreso);
 
-    nuevo_post->nro_id = arreglo_st->cantidad;
+    nuevo_post->nro_id = vector_cantidad(arreglo_st);
 
-    arreglo_st->arreglo[nuevo_post->nro_id] = nuevo_post;
-    
+    vector_guardar(arreglo_st,nuevo_post);
+
     nuevo_post->creador = usuario_activo;
     nuevo_post->contenido = ingreso_copiado;
     nuevo_post->likes = abb_crear(strcmp, NULL);
@@ -94,7 +94,7 @@ usuario_t* logout(usuario_t* usuario_activo){
 }
 
 
-void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t* usuarios){
+void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuarios){
     char* ingreso_publicar = NULL;
     size_t buffer = 0;
     if(getline(&ingreso_publicar, &buffer, stdin) == EOF){
@@ -107,7 +107,6 @@ void publicar(usuario_t* usuario_activo, arreglo_posts_t* arreglo_posts, hash_t*
     }
     
     post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
-    arreglo_posts->cantidad++;
 
     hash_iter_t* iter = hash_iter_crear(usuarios);
     while(!hash_iter_al_final(iter)){
@@ -152,7 +151,7 @@ void ver_prox(usuario_t* usuario_activo){
 }
 
 
-void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
+void likear(usuario_t* usuario_activo, vector_t* arreglo){
     char* que_id_likear = NULL;
     size_t buffer = 0;
     if(getline(&que_id_likear, &buffer, stdin) == EOF){
@@ -165,19 +164,19 @@ void likear(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
         return;
     }
     size_t id = atoi(que_id_likear);
-    if (id >= arreglo->cantidad) {
+    if (id >= vector_cantidad(arreglo)) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         free(que_id_likear);
         return;
     }
     free(que_id_likear);
-    post_t* post_a_likear = arreglo->arreglo[id];
+    post_t* post_a_likear =  vector_obtener(arreglo,id);
     abb_guardar(post_a_likear->likes, usuario_activo->nombre, NULL);
     printf("Post likeado\n");
 }
 
 
-void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
+void ver_likes(usuario_t* usuario_activo, vector_t* arreglo){
     char* que_id_mostrar = NULL;
     size_t buffer;
     if(getline(&que_id_mostrar, &buffer, stdin) == EOF){
@@ -185,9 +184,9 @@ void ver_likes(usuario_t* usuario_activo, arreglo_posts_t* arreglo){
     }
     size_t id = atoi(que_id_mostrar);
     free(que_id_mostrar);
-    post_t* post_a_ver = arreglo->arreglo[id];
+    post_t* post_a_ver = vector_obtener(arreglo,id);
 
-    if (id >= arreglo->cantidad || abb_cantidad(post_a_ver->likes) == 0) {
+    if (id >= vector_cantidad(arreglo) || abb_cantidad(post_a_ver->likes) == 0) {
         printf("Error: Post inexistente o sin likes\n"); 
         return;
     }
