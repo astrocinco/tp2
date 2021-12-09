@@ -4,7 +4,7 @@
  -- TO DO --
         LIMPIAR EL HASH ??
         Pasar prueba 7. Si publicas algo muy grande, te muestra solo una porcion. No se guarda todo? No se muestra todo?
-
+        Struct
 
  -- DUDAS. DISCUTIR -- 
 

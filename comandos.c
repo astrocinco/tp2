@@ -14,7 +14,6 @@
 #include "vectorr.h"
 
 
-
 // AUXILIARES
 
 
