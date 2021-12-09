@@ -81,12 +81,14 @@ void destruir_usuario(void* usuario_void){
 
 
 void destruir_post(void* post_void){
+    printf("Destruir post\n");
     post_t* post = (post_t*)post_void;
 
     abb_destruir(post->likes);
     free(post->contenido);
     free(post);
 }
+
 
 int cmp_posts(const void* a, const void* b){
     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B

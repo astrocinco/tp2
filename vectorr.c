@@ -63,8 +63,10 @@ size_t vector_cantidad(vector_t* vector){
 }
 
 void vector_destruir(vector_t* vector, vector_destruir_dato_t func){
-    for (int i = 0; i < vector->cant-1 ; i++){
-        if (func != NULL){
+    printf("Llamo a vector_destruir\n");
+    if (func != NULL && vector->cant != 0){
+        printf("Entré a func destruir por elem\n");
+        for (int i = 0; i < vector->cant ; i++){
             func(vector->arreglo[i]);
         }
     }
