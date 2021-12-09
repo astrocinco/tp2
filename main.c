@@ -2,31 +2,11 @@
 
 
  -- TO DO --
-        ARREGLO DE POSTS. 
-            STRUCT POST (ID, CREADOR, CONTENIDO, ABB LIKES)          -- HECHO
-        HASH DE USUARIOS                                             -- HECHO
-            STRUCT USUARIO (NOMBRE, HEAP DE POSTS SIN VER TODAVÍA)   -- HECHO
-        HACER CMP PARA HEAP                                          -- HECHO
-    
-        LIMPIAR EL HASH!!!!!!!!!!!!
-
- -- FUNCIONES QUE DEBE TENER --
-        LOGIN                           -- HECHO
-        LOGOUT                          -- HECHO
-        PUBLICAR POST
-        VER PROX POST
-        LIKEAR POST POR ID
-        MOSTRAR LIKE DE POST POR ID
+        LIMPIAR EL HASH
 
 
  -- DUDAS. DISCUTIR -- 
-        - ¿FPRINTF O PRINTF? IMPRIMIMOS NORMALMENTE O EN STDOUT? // 1         SOLUCIONADO -- > ES PRINTF
-        - ¿GETLINE LE PASAMOS UN PUNTERO CADA VEZ? O USAMOS SIEMPRE EL MISMO PUNTERO Y COPIAMOS SU CONTENIDO EN EL LUGAR CORRECTO
-        - PARA GUARDAR USUARIO LOGEADO: GUARDAR COMO VARIABLE EN esperar_orden ¿no? Y CUANDO NO HAYA NADIE LOGEADO usuario_actual = NULL
-        - CORTAR LOOP CON ORDEN EN esperar_orden (LLAMANDO esperar_orden SOLO UNA VEZ DESDE MAIN) O CORTAR CON UN BOOL EN main que se MODIFIQUE DESDE esperar_orden CON PUNTERO
-        LISTO - INIESTA TIENE MISMA AFINIDAD CON PIQUE QUE CON GUARDIOLA?           SOLUCIONADO -- > NO DA LA VUELTA J
 
-        - se guarda el logeado en el main o hacemos un struct
 
 --------------------------------------------------------------------*/
 
