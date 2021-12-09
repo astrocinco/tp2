@@ -25,8 +25,8 @@
 #include "structs.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
-#define CAP_CANT_POSTS 50ul
-#define TAM_MAX_INGRESO 150
+#define CAP_CANT_POSTS 50
+#define TAM_MAX_INGRESO 15000
 
 
 //  DEBUGGERS - BORRAR PARA ENTREGAR
@@ -36,7 +36,7 @@ void impresora_hash(hash_t* hash){
     while(!hash_iter_al_final(iterador)){
         const char* clave_actual = hash_iter_ver_actual(iterador);
         void* dato = hash_obtener(hash, clave_actual);
-        printf("         N°ID: %lu Nombre: %s", ((usuario_t*)dato)->id_txt, clave_actual);
+        printf("         N°ID: %d Nombre: %s", ((usuario_t*)dato)->id_txt, clave_actual);
         hash_iter_avanzar(iterador);
     }
     printf("    Fin impresora hash\n");
@@ -44,7 +44,7 @@ void impresora_hash(hash_t* hash){
 void debugger_feeds(heap_t* feed){
     while(!heap_esta_vacio(feed)){
         dupla_t* elem = heap_desencolar(feed);
-        printf("    Func debugger: ID: %lu - Contenido: %s Publicador: %s", elem->post->nro_id, elem->post->contenido, elem->post->creador->nombre);
+        printf("    Func debugger: ID: %d - Contenido: %s Publicador: %s", elem->post->nro_id, elem->post->contenido, elem->post->creador->nombre);
     }
 }
 
@@ -61,7 +61,6 @@ void destruir_usuario(void* usuario_void){
 
 
 void destruir_post(void* post_void){
-    printf("Destruir post\n");
     post_t* post = (post_t*)post_void;
 
     abb_destruir(post->likes);
@@ -75,22 +74,22 @@ int cmp_posts(const void* a, const void* b){
     const dupla_t* dupla1 = (dupla_t*)a;
     const dupla_t* dupla2 = (dupla_t*)b;
 
-    size_t prioridad_1 = dupla1->prioridad;
-    size_t prioridad_2 = dupla2->prioridad;
+    int prioridad_1 = dupla1->prioridad;
+    int prioridad_2 = dupla2->prioridad;
 
     int dif_prioridad = prioridad_2 - prioridad_1;
 
     // En caso de igual prioridad, el que fue publicado primero tiene prioridad
     if (dif_prioridad == 0){
-        size_t orden_post_1 = dupla1->post->nro_id;
-        size_t orden_post_2 = dupla2->post->nro_id;
+        int orden_post_1 = dupla1->post->nro_id;
+        int orden_post_2 = dupla2->post->nro_id;
         dif_prioridad = orden_post_2 - orden_post_1;
     }
     return dif_prioridad;
 }
 
 
-usuario_t* crear_usuario(char* nombre, size_t id){
+usuario_t* crear_usuario(char* nombre, int id){
     usuario_t* usuario = malloc(sizeof(usuario_t));
     if (!usuario) return NULL;
 
@@ -150,7 +149,7 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     hash_t* hash = hash_crear(destruir_usuario);
     char* line = NULL;
     size_t capacidad = 0;
-    size_t id = 0;
+    int id = 0;
     ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
 
     while(longitud != EOF){ 

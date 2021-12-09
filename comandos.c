@@ -1,5 +1,5 @@
 #define _POSIX_C_SOURCE 200809L
-#define TAM_MAX_INGRESO 150
+#define TAM_MAX_INGRESO 15000
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -41,7 +41,7 @@ dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
     if (nueva_dupla == NULL) return NULL;
 
-    ssize_t prioridad = (receptor->id_txt) - (publicador->id_txt);
+    int prioridad = (receptor->id_txt) - (publicador->id_txt);
     if (prioridad < 0) prioridad = prioridad * (-1);
     nueva_dupla->prioridad = prioridad;
 
@@ -142,7 +142,7 @@ void ver_prox(usuario_t* usuario_activo){
         return;
     }
     dupla_t* dupla = heap_desencolar(usuario_activo->feed);
-    printf("Post ID %lu\n", dupla->post->nro_id);
+    printf("Post ID %d\n", dupla->post->nro_id);
     imprimir_sin_barra_n(dupla->post->creador->nombre);
     printf(" dijo: %s", dupla->post->contenido);
     printf("Likes: %lu\n", abb_cantidad(dupla->post->likes));
@@ -161,7 +161,7 @@ void likear(usuario_t* usuario_activo, vector_t* arreglo){
         free(que_id_likear);
         return;
     }
-    size_t id = atoi(que_id_likear);
+    int id = atoi(que_id_likear);
     if (id >= vector_cantidad(arreglo)) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         free(que_id_likear);
@@ -180,7 +180,7 @@ void ver_likes(usuario_t* usuario_activo, vector_t* arreglo){
     if(getline(&que_id_mostrar, &buffer, stdin) == EOF){
         return;
     }
-    size_t id = atoi(que_id_mostrar);
+    int id = atoi(que_id_mostrar);
     free(que_id_mostrar);
     post_t* post_a_ver = vector_obtener(arreglo,id);
 

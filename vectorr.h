@@ -13,9 +13,9 @@ vector_t* vector_crear();
 
 bool vector_guardar(vector_t* vector, void* dato);
 
-void* vector_obtener(vector_t* vector, size_t pos);
+void* vector_obtener(vector_t* vector, int pos);
 
-size_t vector_cantidad(vector_t* vector);
+int vector_cantidad(vector_t* vector);
 
 void vector_destruir(vector_t* vector, vector_destruir_dato_t func);
 

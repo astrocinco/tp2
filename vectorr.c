@@ -3,20 +3,20 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#define CAP_INIC 50lu
-#define FACTOR_NVA_CAP 2lu
+#define CAP_INIC 50
+#define FACTOR_NVA_CAP 2
 
 typedef struct vector{
     void** arreglo;
-    size_t cant;
-    size_t capa;
+    int cant;
+    int capa;
 } vector_t;
 
 typedef void (*vector_destruir_dato_t) (void *);
 
 // Auxiliares
 
-bool vector_redimensionar(vector_t* vector, size_t nva_cap){
+bool vector_redimensionar(vector_t* vector, int nva_cap){
     if (nva_cap < CAP_INIC) return true;
     void** nuevo_arr = realloc(vector->arreglo, sizeof(void*) * nva_cap);
     if (nuevo_arr == NULL) return false;
@@ -51,12 +51,12 @@ bool vector_guardar(vector_t* vector, void* dato){
     return true;
 }
 
-void* vector_obtener(vector_t* vector, size_t pos){
+void* vector_obtener(vector_t* vector, int pos){
     if (pos >= vector->cant) return NULL;
     return vector->arreglo[pos];
 }
 
-size_t vector_cantidad(vector_t* vector){
+int vector_cantidad(vector_t* vector){
     return vector->cant;
 }
 

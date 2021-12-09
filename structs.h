@@ -16,26 +16,20 @@
 typedef struct usuario{ 
     char* nombre;
     heap_t* feed; 
-    size_t id_txt;
+    int id_txt;
 } usuario_t;
 
 
 typedef struct post{ 
-    size_t nro_id;
+    int nro_id;
     usuario_t* creador;
     char* contenido;
     abb_t* likes; 
 } post_t;
 
-/*
-typedef struct arreglo_posts{ 
-    post_t** arreglo;
-    size_t cantidad;
-} arreglo_posts_t;
-*/
 
 typedef struct dupla{
-    size_t prioridad;
+    int prioridad;
     post_t* post;
 } dupla_t;
 
