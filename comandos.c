@@ -177,7 +177,7 @@ void likear(usuario_t* usuario_activo, vector_t* arreglo){
 
 void ver_likes(usuario_t* usuario_activo, vector_t* arreglo){
     char* que_id_mostrar = NULL;
-    size_t buffer;
+    size_t buffer = 0;
     if(getline(&que_id_mostrar, &buffer, stdin) == EOF){
         return;
     }

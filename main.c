@@ -2,7 +2,8 @@
 
 
  -- TO DO --
-        LIMPIAR EL HASH
+        LIMPIAR EL HASH ??
+        Pasar prueba 7. Si publicas algo muy grande, te muestra solo una porcion. No se guarda todo? No se muestra todo?
 
 
  -- DUDAS. DISCUTIR -- 

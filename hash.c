@@ -8,7 +8,7 @@
 #define FACTOR_NVA_CAP 2ul
 #define FACTOR_CARGA_MAX 2.5
 #define FACTOR_CARGA_MIN 0.2
-#define LARGO_MAX_CLAVES 150ul
+#define LARGO_MAX_CLAVES 15000ul
 #define FUN_HASHING djb2
 
 
