@@ -23,7 +23,6 @@ bool vector_redimensionar(vector_t* vector, size_t nva_cap){
 
     vector->arreglo = nuevo_arr;
     vector->capa = nva_cap;
-    printf("asdsdaasd\n");
     return true;
 }
 
@@ -54,7 +53,6 @@ bool vector_guardar(vector_t* vector, void* dato){
 
 void* vector_obtener(vector_t* vector, size_t pos){
     if (pos >= vector->cant) return NULL;
-
     return vector->arreglo[pos];
 }
 
@@ -63,9 +61,7 @@ size_t vector_cantidad(vector_t* vector){
 }
 
 void vector_destruir(vector_t* vector, vector_destruir_dato_t func){
-    printf("Llamo a vector_destruir\n");
     if (func != NULL && vector->cant != 0){
-        printf("Entré a func destruir por elem\n");
         for (int i = 0; i < vector->cant ; i++){
             func(vector->arreglo[i]);
         }

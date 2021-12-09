@@ -133,11 +133,9 @@ void esperar_orden(hash_t* usuarios){
     vector_t* arreglo_posts = vector_crear();
     
     while(!terminar){
-        //printf("    Debug: Esperando orden en esperar_orden (main.c)\n");
         if(getline(&ingreso, &tam_buffer, stdin) == EOF){
             break;
         }
-
         if (strcmp(ingreso, "login\n") == 0){
             usuario_activo = login(usuarios, usuario_activo);
 
@@ -157,7 +155,6 @@ void esperar_orden(hash_t* usuarios){
             ver_likes(usuario_activo, arreglo_posts);
 
         }else if(strcmp(ingreso, "quit\n") == 0){
-        // TAL VEZ QUITEAR SEA ingreso == NULL. -- VER QUE RETORNA CONTROL+D EN TERMINAL
             terminar = true;
         }else{
             printf("COMANDO INEXISTENTE. INTENTELO DE NUEVO\n");
@@ -179,10 +176,6 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     while(longitud != EOF){ 
         usuario_t* usuario = crear_usuario(line, id);
         hash_guardar(hash, usuario->nombre, usuario);
-
-        //usuario_t* user = hash_obtener(hash,usuario->nombre);
-
-        //printf("%s\n", user->nombre);
         id++;
         longitud = getline(&line,&capacidad,archivo);
     }
@@ -203,7 +196,7 @@ int main(int argc, char *argv[]){
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
     hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
     fclose(archivo);
-    //impresora_hash(hash_usuarios); // DEBUG
+
     esperar_orden(hash_usuarios);
     
     hash_destruir(hash_usuarios);

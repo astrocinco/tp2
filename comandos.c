@@ -13,6 +13,7 @@
 #include "structs.h"
 #include "vectorr.h"
 
+
 // AUXILIARES
 
 
@@ -37,7 +38,6 @@ post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingres
 
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
-    //printf("Creando publicador %s receptor %s", publicador->nombre, receptor->nombre);
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
     if (nueva_dupla == NULL) return NULL;
 
@@ -111,7 +111,6 @@ void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuari
     hash_iter_t* iter = hash_iter_crear(usuarios);
     while(!hash_iter_al_final(iter)){
         const char* user_name = hash_iter_ver_actual(iter);
-        //printf("%s\n", user_name);
         usuario_t* usuario = hash_obtener(usuarios,user_name);
 
         if(usuario != usuario_activo){
@@ -157,7 +156,6 @@ void likear(usuario_t* usuario_activo, vector_t* arreglo){
     if(getline(&que_id_likear, &buffer, stdin) == EOF){
         return;
     }
-
     if (usuario_activo == NULL) {
         printf("Error: Usuario no loggeado o Post inexistente\n"); 
         free(que_id_likear);
@@ -190,14 +188,6 @@ void ver_likes(usuario_t* usuario_activo, vector_t* arreglo){
         printf("Error: Post inexistente o sin likes\n"); 
         return;
     }
-
-
-
     printf("El post tiene %lu likes:\n", abb_cantidad(post_a_ver->likes));
     abb_in_order(post_a_ver->likes, func_imprimir_likes, NULL);
-}
-
-
-void debugger(){
-    printf("Debugger\n");
 }

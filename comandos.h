@@ -25,6 +25,4 @@ void likear(usuario_t* usuario_activo, vector_t* arreglo);
 
 void ver_likes(usuario_t* usuario_activo, vector_t* arreglo);
 
-void debugger();
-
 #endif //_COMANDOS_H_
