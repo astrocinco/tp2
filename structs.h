@@ -8,10 +8,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include "heap.h"
-#include "hash.h"
 #include "abb.h"
-#include "lista.h"
-#include "vectorr.h"
+
 
 typedef struct usuario{ 
     char* nombre;
@@ -32,6 +30,29 @@ typedef struct dupla{
     int prioridad;
     post_t* post;
 } dupla_t;
+
+
+/*
+#ifndef _STRUCTS_H_
+#define _STRUCTS_H_
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <string.h>
+
+
+typedef struct usuario usuario_t;
+
+typedef struct post post_t;
+
+typedef struct dupla dupla_t;
+
+
+#endif //_STRUCTS_H_
+*/
 
 
 #endif //_STRUCTS_H_

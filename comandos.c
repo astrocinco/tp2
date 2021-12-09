@@ -5,13 +5,14 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
+#include "structs.h"
 #include "heap.h"
 #include "hash.h"
 #include "abb.h"
 #include "lista.h"
 #include "comandos.h"
-#include "structs.h"
 #include "vectorr.h"
+
 
 
 // AUXILIARES
