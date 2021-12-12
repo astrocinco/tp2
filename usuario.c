@@ -1,12 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
 #include "usuario.h"
 #include "hash.h"
 #include "heap.h"
-#include "dupla.h"
+//#include "dupla.h"
 #define TAM_MAX_INGRESO 15000
 
 struct usuario{ 
@@ -17,24 +16,24 @@ struct usuario{
 
 // Auxiliares
 
-int cmp_posts(const void* a, const void* b){
-    // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
-    const dupla_t* dupla1 = (dupla_t*)a;
-    const dupla_t* dupla2 = (dupla_t*)b;
+// int cmp_posts(const void* a, const void* b){
+//     // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
+//     const dupla_t* dupla1 = (dupla_t*)a;
+//     const dupla_t* dupla2 = (dupla_t*)b;
 
-    int prioridad_1 = dupla1->prioridad;
-    int prioridad_2 = dupla2->prioridad;
+//     int prioridad_1 = dupla1->prioridad;
+//     int prioridad_2 = dupla2->prioridad;
 
-    int dif_prioridad = prioridad_2 - prioridad_1;
+//     int dif_prioridad = prioridad_2 - prioridad_1;
 
-    // En caso de igual prioridad, el que fue publicado primero tiene prioridad
-    if (dif_prioridad == 0){
-        int orden_post_1 = dupla1->post->nro_id;
-        int orden_post_2 = dupla2->post->nro_id;
-        dif_prioridad = orden_post_2 - orden_post_1;
-    }
-    return dif_prioridad;
-}
+//     // En caso de igual prioridad, el que fue publicado primero tiene prioridad
+//     if (dif_prioridad == 0){
+//         int orden_post_1 = dupla1->post->nro_id;
+//         int orden_post_2 = dupla2->post->nro_id;
+//         dif_prioridad = orden_post_2 - orden_post_1;
+//     }
+//     return dif_prioridad;
+// }
 
 // Primitivas
 

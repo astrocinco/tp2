@@ -23,8 +23,9 @@
 #include "abb.h"
 #include "lista.h"
 #include "comandos.h"
-#include "structs.h"
 #include "post.h"
+#include "usuario.h"
+#include "dupla.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define CAP_CANT_POSTS 50
