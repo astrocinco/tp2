@@ -20,7 +20,7 @@
 // };
 
 
-post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
+post_t* post_crear(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
     post_t* nuevo_post = malloc(sizeof(post_t));
     if (nuevo_post == NULL) return NULL;
 
@@ -40,7 +40,7 @@ post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingres
 }
 
 
-void destruir_post(void* post_void){
+void post_destruir(void* post_void){
     post_t* post = (post_t*)post_void;
 
     abb_destruir(post->likes);

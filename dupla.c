@@ -18,7 +18,7 @@
 //     post_t* post;
 // }; 
 
-dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
+dupla_t* dupla_crear(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
     if (nueva_dupla == NULL) return NULL;
 
@@ -28,4 +28,8 @@ dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
 
     nueva_dupla->post = post;
     return nueva_dupla;
+}
+
+void dupla_destruir(void* dupla){
+    free(dupla);
 }

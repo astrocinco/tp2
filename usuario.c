@@ -39,7 +39,7 @@ int cmp_posts(const void* a, const void* b){
 
 // Primitivas
 
-usuario_t* crear_usuario(char* nombre, int id){
+usuario_t* usuario_crear(char* nombre, int id){
     usuario_t* usuario = malloc(sizeof(usuario_t));
     if (!usuario) return NULL;
 
@@ -52,15 +52,15 @@ usuario_t* crear_usuario(char* nombre, int id){
     return usuario;
 }
 
-hash_t* guardar_usuarios_txt_hash(FILE* archivo){
-    hash_t* hash = hash_crear(destruir_usuario);
+hash_t* usuario_guardar_hash(FILE* archivo){
+    hash_t* hash = hash_crear(usuario_destruir);
     char* line = NULL;
     size_t capacidad = 0;
     int id = 0;
     ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
 
     while(longitud != EOF){ 
-        usuario_t* usuario = crear_usuario(line, id);
+        usuario_t* usuario = usuario_crear(line, id);
         hash_guardar(hash, usuario->nombre, usuario);
         id++;
         longitud = getline(&line,&capacidad,archivo);
@@ -69,9 +69,9 @@ hash_t* guardar_usuarios_txt_hash(FILE* archivo){
     return hash;
 }
 
-void destruir_usuario(void* usuario_void){
+void usuario_destruir(void* usuario_void){
     usuario_t* usuario = (usuario_t*)usuario_void;
     free(usuario->nombre);
-    heap_destruir(usuario->feed, free);
+    heap_destruir(usuario->feed, dupla_destruir);
     free(usuario);
 }

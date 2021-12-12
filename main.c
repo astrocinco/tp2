@@ -72,7 +72,7 @@ void esperar_orden(hash_t* usuarios){
         }
     }
     free(ingreso);
-    vector_destruir(arreglo_posts,destruir_post);
+    vector_destruir(arreglo_posts,post_destruir);
     return;
 }
 
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]){
         return -1;
     }
     FILE* archivo = fopen(argv[ARGUMENTO_NOMBRE_ARCHIVO], "r");
-    hash_t* hash_usuarios = guardar_usuarios_txt_hash(archivo);
+    hash_t* hash_usuarios = usuario_guardar_hash(archivo);
     fclose(archivo);
 
     esperar_orden(hash_usuarios);

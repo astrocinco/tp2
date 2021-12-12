@@ -24,6 +24,17 @@ bool func_imprimir_likes(const char* clave, void* dato, void* extra){
 }
 
 
+void imprimir_sin_barra_n(char* cadena){
+    int numero = 0;
+    char caracter = cadena[numero];
+    while (caracter != '\n'){
+        printf("%c", caracter);
+        numero++;
+        caracter = cadena[numero];
+    }
+}
+
+
 // FUNCIONES PARA COMANDOS
 
 
@@ -74,7 +85,7 @@ void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuari
         return;
     }
     
-    post_t* nuevo_post = crear_post(arreglo_posts, usuario_activo, ingreso_publicar);
+    post_t* nuevo_post = post_crear(arreglo_posts, usuario_activo, ingreso_publicar);
 
     hash_iter_t* iter = hash_iter_crear(usuarios);
     while(!hash_iter_al_final(iter)){
@@ -82,7 +93,7 @@ void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuari
         usuario_t* usuario = hash_obtener(usuarios,user_name);
 
         if(usuario != usuario_activo){
-            dupla_t* dupla = crear_dupla(usuario_activo, usuario, nuevo_post);
+            dupla_t* dupla = dupla_crear(usuario_activo, usuario, nuevo_post);
             heap_encolar(usuario->feed,dupla);
         }
         hash_iter_avanzar(iter);
@@ -90,17 +101,6 @@ void publicar(usuario_t* usuario_activo, vector_t* arreglo_posts, hash_t* usuari
     printf("Post publicado\n");
     hash_iter_destruir(iter);
     free(ingreso_publicar);
-}
-
-
-void imprimir_sin_barra_n(char* cadena){
-    int numero = 0;
-    char caracter = cadena[numero];
-    while (caracter != '\n'){
-        printf("%c", caracter);
-        numero++;
-        caracter = cadena[numero];
-    }
 }
 
 

@@ -21,6 +21,8 @@ typedef struct dupla{
     post_t* post;
 }dupla_t; 
 
-dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post);
+dupla_t* dupla_crear(usuario_t* publicador, usuario_t* receptor, post_t* post);
+
+void dupla_destruir(void* dupla);
 
 #endif // _DUPLA_H_

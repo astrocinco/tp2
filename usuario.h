@@ -16,10 +16,10 @@ typedef struct usuario{
     int id_txt;
 }usuario_t;
 
-usuario_t* usuario_crear();
+usuario_t* usuario_crear(char* nombre, int id);
 
-hash_t* guardar_usuarios_txt_hash(FILE* archivo);
+hash_t* usuario_guardar_hash(FILE* archivo);
 
-void destruir_usuario(void* usuario_void);
+void usuario_destruir(void* usuario_void);
 
 #endif //_USUARIO_H_

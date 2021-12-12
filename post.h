@@ -19,8 +19,8 @@ typedef struct post{
     abb_t* likes; 
 } post_t;
 
-post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso);
+post_t* post_crear(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso);
 
-void destruir_post(void* post_void);
+void post_destruir(void* post_void);
 
 #endif //_POST_H_
