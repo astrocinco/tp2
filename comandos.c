@@ -17,6 +17,7 @@
 
 // AUXILIARES
 
+
 bool func_imprimir_likes(const char* clave, void* dato, void* extra){
     printf("\t%s", clave);
     return true;

@@ -13,10 +13,10 @@
 #include "post.h"
 #include "dupla.h"
 
-struct dupla{
-    int prioridad;
-    post_t* post;
-}; 
+// struct dupla{
+//     int prioridad;
+//     post_t* post;
+// }; 
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));

@@ -15,7 +15,11 @@
 #include "usuario.h"
 #include "post.h"
 
-typedef struct dupla dupla_t;
+//typedef struct dupla dupla_t;
+typedef struct dupla{
+    int prioridad;
+    post_t* post;
+}dupla_t; 
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post);
 

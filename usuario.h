@@ -9,7 +9,12 @@
 #include "hash.h"
 #include "heap.h"
 
-typedef struct usuario usuario_t;
+//typedef struct usuario usuario_t;
+typedef struct usuario{ 
+    char* nombre;
+    heap_t* feed; 
+    int id_txt;
+}usuario_t;
 
 usuario_t* usuario_crear();
 

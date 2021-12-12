@@ -11,7 +11,13 @@
 #include "vectorr.h"
 #include "usuario.h"
 
-typedef struct post post_t;
+//typedef struct post post_t;
+typedef struct post{
+    int nro_id;
+    usuario_t* creador;
+    char* contenido;
+    abb_t* likes; 
+} post_t;
 
 post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso);
 
