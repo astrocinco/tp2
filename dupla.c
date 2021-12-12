@@ -3,7 +3,6 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include <string.h>
-#include "structs.h"
 #include "heap.h"
 #include "hash.h"
 #include "abb.h"

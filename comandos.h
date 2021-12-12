@@ -10,7 +10,6 @@
 #include "hash.h"
 #include "abb.h"
 #include "lista.h"
-#include "structs.h"
 #include "vectorr.h"
 #include "usuario.h"
 #include "dupla.h"
