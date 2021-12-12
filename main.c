@@ -24,6 +24,7 @@
 #include "lista.h"
 #include "comandos.h"
 #include "structs.h"
+#include "post.h"
 #define NRO_ARGUMENTOS_INGRESO_TXT 2
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define CAP_CANT_POSTS 50
@@ -31,35 +32,6 @@
 
 
 //  --- FUNCIONES
-
-
-void destruir_post(void* post_void){
-    post_t* post = (post_t*)post_void;
-
-    abb_destruir(post->likes);
-    free(post->contenido);
-    free(post);
-}
-
-
-int cmp_posts(const void* a, const void* b){
-    // Retorna positivo si la dupla A tiene prioridad. Negativo si la tiene la B
-    const dupla_t* dupla1 = (dupla_t*)a;
-    const dupla_t* dupla2 = (dupla_t*)b;
-
-    int prioridad_1 = dupla1->prioridad;
-    int prioridad_2 = dupla2->prioridad;
-
-    int dif_prioridad = prioridad_2 - prioridad_1;
-
-    // En caso de igual prioridad, el que fue publicado primero tiene prioridad
-    if (dif_prioridad == 0){
-        int orden_post_1 = dupla1->post->nro_id;
-        int orden_post_2 = dupla2->post->nro_id;
-        dif_prioridad = orden_post_2 - orden_post_1;
-    }
-    return dif_prioridad;
-}
 
 
 void esperar_orden(hash_t* usuarios){

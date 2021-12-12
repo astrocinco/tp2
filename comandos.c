@@ -17,25 +17,6 @@
 // AUXILIARES
 
 
-post_t* crear_post(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
-    post_t* nuevo_post = malloc(sizeof(post_t));
-    if (nuevo_post == NULL) return NULL;
-
-    char* ingreso_copiado = malloc(sizeof(char) * TAM_MAX_INGRESO);
-    if (ingreso_copiado == NULL) return NULL;
-    strcpy(ingreso_copiado, ingreso);
-
-    nuevo_post->nro_id = vector_cantidad(arreglo_st);
-
-    vector_guardar(arreglo_st,nuevo_post);
-
-    nuevo_post->creador = usuario_activo;
-    nuevo_post->contenido = ingreso_copiado;
-    nuevo_post->likes = abb_crear(strcmp, NULL);
-
-    return nuevo_post;
-}
-
 
 dupla_t* crear_dupla(usuario_t* publicador, usuario_t* receptor, post_t* post){
     dupla_t* nueva_dupla = malloc(sizeof(dupla_t));
