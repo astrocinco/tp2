@@ -33,14 +33,6 @@
 //  --- FUNCIONES
 
 
-void destruir_usuario(void* usuario_void){
-    usuario_t* usuario = (usuario_t*)usuario_void;
-    free(usuario->nombre);
-    heap_destruir(usuario->feed, free);
-    free(usuario);
-}
-
-
 void destruir_post(void* post_void){
     post_t* post = (post_t*)post_void;
 
@@ -67,20 +59,6 @@ int cmp_posts(const void* a, const void* b){
         dif_prioridad = orden_post_2 - orden_post_1;
     }
     return dif_prioridad;
-}
-
-
-usuario_t* crear_usuario(char* nombre, int id){
-    usuario_t* usuario = malloc(sizeof(usuario_t));
-    if (!usuario) return NULL;
-
-    usuario->nombre = malloc(sizeof(char) * TAM_MAX_INGRESO);
-    if (usuario->nombre == NULL) return NULL;
-
-    strcpy(usuario->nombre, nombre); 
-    usuario->feed = heap_crear(cmp_posts); 
-    usuario->id_txt = id;
-    return usuario;
 }
 
 
@@ -123,24 +101,6 @@ void esperar_orden(hash_t* usuarios){
     free(ingreso);
     vector_destruir(arreglo_posts,destruir_post);
     return;
-}
-
-
-hash_t* guardar_usuarios_txt_hash(FILE* archivo){
-    hash_t* hash = hash_crear(destruir_usuario);
-    char* line = NULL;
-    size_t capacidad = 0;
-    int id = 0;
-    ssize_t longitud = getline(&line, &capacidad, archivo); // PONER EZE TRUCO -si
-
-    while(longitud != EOF){ 
-        usuario_t* usuario = crear_usuario(line, id);
-        hash_guardar(hash, usuario->nombre, usuario);
-        id++;
-        longitud = getline(&line,&capacidad,archivo);
-    }
-    free(line);
-    return hash;
 }
 
 
