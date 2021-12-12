@@ -9,6 +9,7 @@
 #include "usuario.h"
 #include "abb.h"
 #include "post.h"
+#define TAM_MAX_INGRESO 15000
 
 
 struct post{ 

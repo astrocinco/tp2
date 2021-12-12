@@ -12,6 +12,9 @@
 #include "lista.h"
 #include "structs.h"
 #include "vectorr.h"
+#include "usuario.h"
+#include "dupla.h"
+#include "post.h"
 
 usuario_t* login(hash_t* usuarios, usuario_t* usuario_activo);
 

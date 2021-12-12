@@ -6,6 +6,8 @@
 #include "usuario.h"
 #include "hash.h"
 #include "heap.h"
+#include "dupla.h"
+#define TAM_MAX_INGRESO 15000
 
 struct usuario{ 
     char* nombre;
