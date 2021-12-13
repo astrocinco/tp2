@@ -15,7 +15,6 @@
 #include "usuario.h"
 #include "post.h"
 
-//typedef struct dupla dupla_t;
 typedef struct dupla{
     int prioridad;
     post_t* post;

@@ -11,7 +11,6 @@
 #include "vectorr.h"
 #include "usuario.h"
 
-//typedef struct post post_t;
 typedef struct post{
     int nro_id;
     usuario_t* creador;

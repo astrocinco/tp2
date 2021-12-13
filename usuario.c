@@ -10,12 +10,6 @@
 #include "dupla.h"
 #define TAM_MAX_INGRESO 15000
 
-// struct usuario{ 
-//     char* nombre;
-//     heap_t* feed; 
-//     int id_txt;
-// };
-
 // Auxiliares
 
 int cmp_posts(const void* a, const void* b){

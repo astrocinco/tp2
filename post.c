@@ -12,14 +12,6 @@
 #define TAM_MAX_INGRESO 15000
 
 
-// struct post{ 
-//     int nro_id;
-//     usuario_t* creador;
-//     char* contenido;
-//     abb_t* likes; 
-// };
-
-
 post_t* post_crear(vector_t* arreglo_st, usuario_t* usuario_activo, char* ingreso){
     post_t* nuevo_post = malloc(sizeof(post_t));
     if (nuevo_post == NULL) return NULL;
