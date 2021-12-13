@@ -1,17 +1,3 @@
-/*--------------------------------------------------------------------
-
-
- -- TO DO --
-        LIMPIAR EL HASH ??
-        Pasar prueba 7. Si publicas algo muy grande, te muestra solo una porcion. No se guarda todo? No se muestra todo?
-        Struct
-
- -- DUDAS. DISCUTIR -- 
-
-
---------------------------------------------------------------------*/
-
-
 #define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
@@ -30,9 +16,6 @@
 #define ARGUMENTO_NOMBRE_ARCHIVO 1
 #define CAP_CANT_POSTS 50
 #define TAM_MAX_INGRESO 30000
-
-
-//  --- FUNCIONES
 
 
 void esperar_orden(hash_t* usuarios){
